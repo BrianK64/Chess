@@ -81,38 +81,62 @@ class Player1():
         # but in two dimensional arrays, we go through rows first (rank) and then column (file)
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         if game.board[curr_index[0]][curr_index[1]] == ['P', 'White']:
-            
-            if curr_index[0] < len(rank) - 1:           # Checking if the piece the player is looking for is at the top of the board
+            move_set_list = []
 
-                if curr_index[1] == 0:                  # Corner case 1 - far left
+            # Checking if the piece the player is looking for is at the top of the board
+            if curr_index[0] < len(rank) - 1:
+
+                # Conrer case 1 - far left
+                if curr_index[1] == 0:
                     move_set_index = [curr_index[0] - 1, curr_index[1] + 1]
-                    move_set_list = [file[move_set_index[1]], rank[move_set_index[0]]]
-                    move_set_let = ''.join(move_set_list)
-                    return (f'Your possible move for pawn at position {position} is {move_set_let}')
-                
-                elif curr_index[1] == len(file) - 1:    # Corner case 2 - far right
-                    move_set_index = [curr_index[0] -1, curr_index[1] - 1]
-                    move_set_list = [file[move_set_index[1]], rank[move_set_index[0]]]
-                    move_set_let = ''.join(move_set_list)
-                    return (f'Your possible move for pawn at position {position} is {move_set_let}')
+                    if game.board[move_set_index[0]][move_set_index[1]] == ' ':
+                        move_set_list.append(move_set_index)
 
-                else:                                   # When the piece is not in the edge of the board
+                # Corner case 2 - far right
+                elif curr_index[1] == len(file) - 1:
+                    move_set_index = [curr_index[0] -1, curr_index[1] - 1]
+                    if game.board[move_set_index[0]][move_set_index[1]] == ' ':
+                        move_set_list.append(move_set_index)
+
+                # When the piece is not in the edge of the board
+                else:
                     move_set_index = [[curr_index[0] - 1, curr_index[1] - 1], [curr_index[0] -1, curr_index[1] + 1]]
-                    move_set_list = [[file[move_set_index[0][1]], rank[move_set_index[0][0]]], [file[move_set_index[1][1]], rank[move_set_index[1][0]]]]
-                    move_set_let = [''.join(move) for move in move_set_list]
-                    return (f'Your possible moves for pawn at position {position} are {move_set_let[0]} and {move_set_let[1]}')
+                    for move in move_set_index:
+                        if game.board[move[0]][move[1]] == ' ':
+                            move_set_list.append(move)
+
+                '''
+                # Use this instead of visualization if locational information is wanted.
+                move_let_list = []
+                for move in move_set_list:
+                    move_let_list.append([file[move[1]], rank[move[0]]])
+                move_set_let = [''.join(move) for move in move_let_list]
+                if len(move_set_let) == 2:
+                    print(f'Your possible moves for pawn at position {position} are {move_set_let[0]} and {move_set_let[1]}')
+                else:
+                    print(f'Your possible move for pawn at position {position} is {move_set_let[0]}')
+                '''
+
+                # deepcopy is required so we don't alternate the original game.
+                move_map = copy.deepcopy(game)
+                for move in move_set_list:
+                    move_map.board[move[0]][move[1]] = '*'
+                print(f'A map of your possible moves for pawn at position {position}:')
+                return move_map.get_board()
+
+            # The pawn at the position given is at the top of the board.
             else:
                 return (f"This pawn at position {position} cannot move forward")
+
         else:
             return ('Invalid input')
-
-        ''' Need to cover cases where there is already a piece at the location the pawn can possibly move'''
 
     def possible_moves_for_bishop(self, position, game):
         curr_let = [loc for loc in position]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         if game.board[curr_index[0]][curr_index[1]] == ['B', 'White']:
             move_set_list = []
+
             # Case 1: Up-left
             ptr = curr_index
             while ptr[0] > 0 and ptr[1] > 0:

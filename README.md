@@ -22,3 +22,6 @@ Description for Chess class:
     rank 1 on chess board would be 7th row element of the array and rank 8 would be 0th row element.
   
   
+  note on 04/29/2023
+    - Might add classes for each piece to handle possible moves and moving the piece.
+      - This way, we can just call the function in player class to figure out what to move and how to move depending on the color the player is assigned.

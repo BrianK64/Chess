@@ -7,12 +7,12 @@ but interact with each other by directly calling objects' instances.
 
 Description for Chess class:
   This class is mainly for creating a board, setting up the board, and selecting each player's color and who starts first.
-  Does not take in any arguments but records instances like board, player1, player2, each player's color.
+  This class does not take in any arguments but records instances like board, player1, player2, each player's color.
   
  Description for Player1 and Player2 class:
   Takes in player's name, and a Chess object to keep track of current game.
   Player1 can see possible moves for each type of pieces in Chess.
-  Can also move a piece player wants to move and update the board.
+  Player1 can also move a piece player wants to move and update the board.
   
   
   #Things to note: 

@@ -105,17 +105,15 @@ class Player1():
                         if game.board[move[0]][move[1]] == ' ':
                             move_set_list.append(move)
 
-                '''
-                # Use this instead of visualization if locational information is wanted.
                 move_let_list = []
                 for move in move_set_list:
                     move_let_list.append([file[move[1]], rank[move[0]]])
                 move_set_let = [''.join(move) for move in move_let_list]
+                
                 if len(move_set_let) == 2:
                     print(f'Your possible moves for pawn at position {position} are {move_set_let[0]} and {move_set_let[1]}')
                 else:
                     print(f'Your possible move for pawn at position {position} is {move_set_let[0]}')
-                '''
 
                 # deepcopy is required so we don't alternate the original game.
                 move_map = copy.deepcopy(game)
@@ -135,43 +133,9 @@ class Player1():
     def possible_moves_for_bishop(self, position, game):
         curr_let = [loc for loc in position]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['B', 'White']:
-            move_set_list = []
-
-            # Case 1: Up-left
-            ptr = curr_index
-            while ptr[0] > 0 and ptr[1] > 0:
-                ptr = [ptr[0] - 1, ptr[1] - 1]
-                if game.board[ptr[0]][ptr[1]] == ' ':
-                    move_set_list.append(ptr)
-
-            # Case 2: up-right
-            ptr = curr_index
-            while ptr[0] > 0 and ptr[1] < len(file) - 1:
-                ptr = [ptr[0] - 1, ptr[1] + 1]
-                if game.board[ptr[0]][ptr[1]] == ' ':
-                    move_set_list.append(ptr)
-
-            # Case 3: down-left
-            ptr = curr_index
-            while ptr[0] < len(rank) - 1 and ptr[1] > 0:
-                ptr = [ptr[0] + 1, ptr[1] - 1]
-                if game.board[ptr[0]][ptr[1]] == ' ':
-                    move_set_list.append(ptr)
-
-            # Case 4: down-right
-            ptr = curr_index
-            while ptr[0] < len(rank) - 1 and ptr[1] < len(file) - 1:
-                ptr = [ptr[0] + 1, ptr[1] + 1]
-                if game.board[ptr[0]][ptr[1]] == ' ':
-                    move_set_list.append(ptr)
-            
-            # Visualize possible moves
-            move_map = copy.deepcopy(game)
-            for move in move_set_list:
-                move_map.board[move[0]][move[1]] = '*'
+        if game.board[curr_index[0]][curr_index[1]] == ['B', self.player_color]:
             print(f'A map of your possible moves for bishop at position {position}:')
-            return move_map.get_board()
+            return Bishop_possible_moves(game, curr_index)
 
 
     def possibe_moves_for_rook(self, position, game):
@@ -180,40 +144,6 @@ class Player1():
         if game.board[curr_index[0]][curr_index[1]] == ['R', self.player_color]:
             print(f'A map of your possible moves for rook at position {position}:')
             return Rook_possible_moves(game, curr_index)
-            
-            '''
-            move_set_list = []
-
-            ptr = curr_index
-            while ptr[0] > 0:
-                ptr = [ptr[0] - 1, ptr[1]]
-                if game.board[ptr[0]][ptr[1]] == ' ':
-                    move_set_list.append(ptr)
-
-            ptr = curr_index
-            while ptr[0] < len(rank) - 1:
-                ptr = [ptr[0] + 1, ptr[1]]
-                if game.board[ptr[0]][ptr[1]] == ' ':
-                    move_set_list.append(ptr)
-
-            ptr = curr_index
-            while ptr[1] > 0:
-                ptr = [ptr[0], ptr[1] - 1]
-                if game.board[ptr[0]][ptr[1]] == ' ':
-                    move_set_list.append(ptr)
-            
-            ptr = curr_index
-            while ptr[1] < len(file) - 1:
-                ptr = [ptr[0], ptr[1] + 1]
-                if game.board[ptr[0]][ptr[1]] == ' ':
-                    move_set_list.append(ptr)
-
-            move_map = copy.deepcopy(game)
-            for move in move_set_list:
-                move_map.board[move[0]][move[1]] = '*'
-            print(f'A map of your possible moves for rook at position {position}:')
-            return move_map.get_board()
-            '''
 
 
     def possible_moves_for_knight(self, position, game):
@@ -268,6 +198,44 @@ def Rook_possible_moves(game, index):
         if game.board[ptr[0]][ptr[1]] == ' ':
             move_set_list.append(ptr)
 
+    move_map = copy.deepcopy(game)
+    for move in move_set_list:
+        move_map.board[move[0]][move[1]] = '*'
+    return move_map.get_board()
+
+
+def Bishop_possible_moves(game, index):
+    move_set_list = []
+
+    # Case 1: Up-left
+    ptr = index
+    while ptr[0] > 0 and ptr[1] > 0:
+        ptr = [ptr[0] - 1, ptr[1] - 1]
+        if game.board[ptr[0]][ptr[1]] == ' ':
+            move_set_list.append(ptr)
+
+    # Case 2: up-right
+    ptr = index
+    while ptr[0] > 0 and ptr[1] < len(file) - 1:
+        ptr = [ptr[0] - 1, ptr[1] + 1]
+        if game.board[ptr[0]][ptr[1]] == ' ':
+            move_set_list.append(ptr)
+
+    # Case 3: down-left
+    ptr = index
+    while ptr[0] < len(rank) - 1 and ptr[1] > 0:
+        ptr = [ptr[0] + 1, ptr[1] - 1]
+        if game.board[ptr[0]][ptr[1]] == ' ':
+            move_set_list.append(ptr)
+
+    # Case 4: down-right
+    ptr = index
+    while ptr[0] < len(rank) - 1 and ptr[1] < len(file) - 1:
+        ptr = [ptr[0] + 1, ptr[1] + 1]
+        if game.board[ptr[0]][ptr[1]] == ' ':
+            move_set_list.append(ptr)
+    
+    # Visualize possible moves
     move_map = copy.deepcopy(game)
     for move in move_set_list:
         move_map.board[move[0]][move[1]] = '*'

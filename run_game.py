@@ -7,3 +7,5 @@ p1.update_player(game)
 p2.update_player(game)
 game.setup_board()
 print(game.select_player())
+
+p1.possibe_moves_for_rook('h1', game)

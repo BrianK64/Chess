@@ -172,6 +172,44 @@ class Player1():
             print(f'A map of your possible moves for bishop at position {position}:')
             return move_map.get_board()
 
+    def possibe_moves_for_rook(self, position, game):
+        curr_let = [loc for loc in position]
+        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
+        if game.board[curr_index[0]][curr_index[1]] == ['R', 'White']:
+            move_set_list = []
+
+            ptr = curr_index
+            while ptr[0] > 0:
+                ptr = [ptr[0] - 1, ptr[1]]
+                if game.board[ptr[0]][ptr[1]] == ' ':
+                    move_set_list.append(ptr)
+
+            ptr = curr_index
+            while ptr[0] < len(rank) - 1:
+                ptr = [ptr[0] + 1, ptr[1]]
+                if game.board[ptr[0]][ptr[1]] == ' ':
+                    move_set_list.append(ptr)
+
+            ptr = curr_index
+            while ptr[1] > 0:
+                ptr = [ptr[0], ptr[1] - 1]
+                if game.board[ptr[0]][ptr[1]] == ' ':
+                    move_set_list.append(ptr)
+            
+            ptr = curr_index
+            while ptr[1] < len(file) - 1:
+                ptr = [ptr[0], ptr[1] + 1]
+                if game.board[ptr[0]][ptr[1]] == ' ':
+                    move_set_list.append(ptr)
+
+            move_map = copy.deepcopy(game)
+            for move in move_set_list:
+                move_map.board[move[0]][move[1]] = '*'
+            print(f'A map of your possible moves for rook at position {position}:')
+            return move_map.get_board()
+
+
+
     
 
 class Player2():

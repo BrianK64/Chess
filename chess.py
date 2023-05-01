@@ -109,7 +109,7 @@ class Player1():
                 for move in move_set_list:
                     move_let_list.append([file[move[1]], rank[move[0]]])
                 move_set_let = [''.join(move) for move in move_let_list]
-                
+
                 if len(move_set_let) == 2:
                     print(f'Your possible moves for pawn at position {position} are {move_set_let[0]} and {move_set_let[1]}')
                 else:
@@ -149,8 +149,9 @@ class Player1():
     def possible_moves_for_knight(self, position, game):
         curr_let = [loc for loc in position]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['N', 'White']:
-            move_set_list = []
+        if game.board[curr_index[0]][curr_index[1]] == ['N', self.player_color]:
+            print(f'A map of your possible moves for knight at position {position}:')
+            return Knight_possible_moves(game, curr_index)
 
 
 
@@ -169,6 +170,7 @@ class Player2():
         self.player_color = game.player2_color
         if self.player_color == 'White':
             self.turn = True
+
 
 
 def Rook_possible_moves(game, index):
@@ -202,6 +204,73 @@ def Rook_possible_moves(game, index):
     for move in move_set_list:
         move_map.board[move[0]][move[1]] = '*'
     return move_map.get_board()
+
+def Knight_possible_moves(game, index):
+    move_set_list = []
+
+    # one-up two-left
+    ptr = index
+    if ptr[0] -1 >= 0 and ptr[1] - 2 > 0:
+        ptr = [ptr[0] - 1, ptr[1] - 2]
+        if game.board[ptr[0]][ptr[1]] == ' ':
+            move_set_list.appent(ptr)
+    
+    # two-up one-left
+    ptr = index
+    if ptr[0] - 2 >= 0 and ptr[1] - 1 >= 0:
+        ptr = [ptr[0] - 2, ptr[1] - 1]
+        if game.board[ptr[0]][ptr[1]] == ' ':
+            move_set_list.append(ptr)
+
+    # one-up two-right
+    ptr = index
+    if ptr[0] - 1 >= 0 and ptr[1] + 2 < len(file):
+        ptr = [ptr[0] - 1, ptr[1] + 2]
+        if game.board[ptr[0]][ptr[1]] == ' ':
+            move_set_list.append(ptr)
+
+    # two-up one-right
+    ptr = index
+    if ptr[0] - 2 >= 0 and ptr[1] + 1 < len(file):
+        ptr = [ptr[0] - 2, ptr[1] + 1]
+        if game.board[ptr[0]][ptr[1]] == ' ':
+            move_set_list.append(ptr)
+
+    # one-down two-left
+    ptr = index
+    if ptr[0] + 1 < len(rank) and ptr[1] - 2 >= 0:
+        ptr = [ptr[0] + 1, ptr[1] -2]
+        if game.board[ptr[0]][ptr[1]] == ' ':
+            move_set_list.append(ptr)
+
+    # two-down one-left
+    ptr = index
+    if ptr[0] + 2 < len(rank) and ptr[1] - 1 >= 0:
+        ptr = [ptr[0] + 2, ptr[1] - 1]
+        if game.board[ptr[0]][ptr[1]] == ' ':
+            move_set_list.append(ptr)
+
+    # one-down two-right
+    ptr = index
+    if ptr[0] + 1 < len(rank) and ptr[1] + 2 < len(file):
+        ptr = [ptr[0] + 1, ptr[1] + 2]
+        if game.board[ptr[0]][ptr[1]] == ' ':
+            move_set_list.append(ptr)
+
+    # two-down one-right
+    ptr = index
+    if ptr[0] + 2 < len(rank) and ptr[1] + 1 < len(file):
+        ptr = [ptr[0] + 2, ptr[1] + 1]
+        if game.board[ptr[0]][ptr[1]] == ' ':
+            move_set_list.append(ptr)
+
+    move_map = copy.deepcopy(game)
+    for move in move_set_list:
+        move_map.board[move[0]][move[1]] = '*'
+    return move_map.get_board()
+
+    
+
 
 
 def Bishop_possible_moves(game, index):

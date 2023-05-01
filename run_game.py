@@ -9,5 +9,6 @@ game.setup_board()
 print(game.select_player())
 p1.get_color(game)
 
-p1.possible_moves_for_bishop('f1', game)
 p1.possibe_moves_for_rook('a1', game)
+p1.possible_moves_for_bishop('f1', game)
+p1.possible_moves_for_knight('g1', game)

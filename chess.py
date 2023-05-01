@@ -135,7 +135,7 @@ class Player1():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         if game.board[curr_index[0]][curr_index[1]] == ['B', self.player_color]:
             print(f'A map of your possible moves for bishop at position {position}:')
-            return Bishop_possible_moves(game, curr_index)
+            return Bishop_possible_moves(game, curr_index)[1]
 
 
     def possibe_moves_for_rook(self, position, game):
@@ -143,7 +143,7 @@ class Player1():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         if game.board[curr_index[0]][curr_index[1]] == ['R', self.player_color]:
             print(f'A map of your possible moves for rook at position {position}:')
-            return Rook_possible_moves(game, curr_index)
+            return Rook_possible_moves(game, curr_index)[1]
 
 
     def possible_moves_for_knight(self, position, game):
@@ -152,6 +152,14 @@ class Player1():
         if game.board[curr_index[0]][curr_index[1]] == ['N', self.player_color]:
             print(f'A map of your possible moves for knight at position {position}:')
             return Knight_possible_moves(game, curr_index)
+
+    
+    def possible_moves_for_king(self, position, game):
+        curr_let = [loc for loc in position]
+        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
+        if game.board[curr_index[0]][curr_index[1]] == ['K', self.player_color]:
+            print(f'A map of your possible moves for king at position {position}:')
+            return King_possible_moves(game, curr_index)[1]
 
 
 
@@ -203,7 +211,7 @@ def Rook_possible_moves(game, index):
     move_map = copy.deepcopy(game)
     for move in move_set_list:
         move_map.board[move[0]][move[1]] = '*'
-    return move_map.get_board()
+    return move_set_list, move_map.get_board()
 
 def Knight_possible_moves(game, index):
     move_set_list = []
@@ -308,4 +316,18 @@ def Bishop_possible_moves(game, index):
     move_map = copy.deepcopy(game)
     for move in move_set_list:
         move_map.board[move[0]][move[1]] = '*'
-    return move_map.get_board()
+    return move_set_list, move_map.get_board()
+
+
+def King_possible_moves(game, index):
+    move_set_list_cross = Rook_possible_moves(game, index)[0]
+    move_set_list_diagonal = Bishop_possible_moves(game, index)[0]
+    move_set_list = move_set_list_cross + move_set_list_diagonal
+    print(move_set_list)
+
+    move_map = copy.deepcopy(game)
+    for move in move_set_list:
+        move_map.board[move[0]][move[1]] = '*'
+    return move_set_list, move_map.get_board()
+
+    

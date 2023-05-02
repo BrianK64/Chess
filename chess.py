@@ -189,9 +189,12 @@ class Player1():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         if game.board[curr_index[0]][curr_index[1]] == ['Q', self.player_color]:
             print(f'A map of your possible moves for queen at position {position}:')
-            return Queen_possible_moves(game, curr_index)[1]
+            move_set_list = Queen_possible_moves(game, curr_index)
 
-
+            move_map = copy.deepcopy(game)
+            for move in move_set_list:
+                move_map.board[move[0]][move[1]] = '*'
+            return move_map.get_board()
 
     
 
@@ -350,7 +353,18 @@ def King_possible_moves(game, index):
     return move_set_list
 
 def Queen_possible_moves(game, index):
-    move_sset_list = []
+    move_set_list = []
 
+    # Case 1
+    ptr = index
+    # surrounding three ranks of current index
+    for rank_i in range(ptr[0] - 1, ptr[0] + 2):
+        # surrounding three files of current index
+        for file_i in range(ptr[1] - 1, ptr[1] + 2):
+            # check if new  index is within the range of the board and if new index is not equalt to previous index.
+            if rank_i >= 0 and file_i >= 0 and rank_i <= len(rank) - 1 and file_i <= len(file) - 1 and [rank_i, file_i] != index:
+                # if it is within the range and not equal to previous index, check if block at this index is already filled in.
+                if game.board[rank_i][file_i] == ' ':
+                    move_set_list.append([rank_i, file_i])
 
-    
+    return move_set_list

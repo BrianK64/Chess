@@ -92,7 +92,7 @@ class Player1():
             return move_map.get_board()
 
 
-    def possibe_moves_for_rook(self, position, game):
+    def possible_moves_for_rook(self, position, game):
         curr_let = [loc for loc in position]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         if game.board[curr_index[0]][curr_index[1]] == ['R', self.player_color]:
@@ -277,6 +277,20 @@ class Player2():
 
         return True
 
+    
+    def move_rook(self, position_from, position_to, game):
+        curr_let = [loc for loc in position_from]
+        next_let = [loc for loc in position_to]
+        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
+        next_index = [rank.index(next_let[1]), file.index(next_let[0])]
+        move_set_list = Rook_possible_moves(game, curr_index)
+
+        if next_index in move_set_list:
+            move_piece(game, curr_index, next_index)
+            print(f'Rook at {position_from} has been moved to {position_to}')
+
+        return True
+
 
 def Rook_possible_moves(game, index):
     move_set_list = []
@@ -286,18 +300,24 @@ def Rook_possible_moves(game, index):
         ptr = [ptr[0] - 1, ptr[1]]
         if game.board[ptr[0]][ptr[1]] == ' ':
             move_set_list.append(ptr)
+        else:
+            break
 
     ptr = index
     while ptr[0] < len(rank) - 1:
         ptr = [ptr[0] + 1, ptr[1]]
         if game.board[ptr[0]][ptr[1]] == ' ':
             move_set_list.append(ptr)
+        else:
+            break
 
     ptr = index
     while ptr[1] > 0:
         ptr = [ptr[0], ptr[1] - 1]
         if game.board[ptr[0]][ptr[1]] == ' ':
             move_set_list.append(ptr)
+        else:
+            break
     
     ptr = index
     while ptr[1] < len(file) - 1:

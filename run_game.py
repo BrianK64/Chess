@@ -23,3 +23,7 @@ p2.possible_moves_for_knight('g8', game)
 p2.possible_moves_for_bishop('c8', game)
 p2.possible_moves_for_king('d8', game)
 p2.possible_moves_for_queen('e8', game)
+
+p1.move_pawn('a2', 'b3', game)
+p2.move_pawn('c7', 'd6', game)
+game.get_board()

@@ -159,6 +159,20 @@ class Player1():
             return move_map.get_board()
 
 
+    def move_pawn(self, position_from, position_to, game):
+        curr_let = [loc for loc in position_from]
+        next_let = [loc for loc in position_to]
+        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
+        next_index = [rank.index(next_let[1]), file.index(next_let[0])]
+        move_set_list = Pawn_possible_moves(game, curr_index, self.player_color)
+
+        if next_index in move_set_list:
+            move_piece(game, curr_index, next_index)
+            print(f'Pawn at {position_from} has been moved to {position_to}')
+
+        return True
+    
+
 class Player2():
     def __init__(self, player, turn=False):
         self.player = player
@@ -248,6 +262,20 @@ class Player2():
             for move in move_set_list:
                 move_map.board[move[0]][move[1]] = '*'
             return move_map.get_board()
+
+
+    def move_pawn(self, position_from, position_to, game):
+        curr_let = [loc for loc in position_from]
+        next_let = [loc for loc in position_to]
+        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
+        next_index = [rank.index(next_let[1]), file.index(next_let[0])]
+        move_set_list = Pawn_possible_moves(game, curr_index, self.player_color)
+
+        if next_index in move_set_list:
+            move_piece(game, curr_index, next_index)
+            print(f'Pawn at {position_from} has been moved to {position_to}')
+
+        return True
 
 
 def Rook_possible_moves(game, index):
@@ -423,3 +451,9 @@ def Pawn_possible_moves(game, index, color):
                     move_set_list.append([ptr[0] + 1, file_i])
 
     return move_set_list
+
+
+def move_piece(game, index_from, index_to):
+    temp = game.board[index_from[0]][index_from[1]]
+    game.board[index_from[0]][index_from[1]] = ' '
+    game.board[index_to[0]][index_to[1]] = temp

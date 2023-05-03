@@ -25,3 +25,6 @@ And global functions for calculating the list of possible moves of each piece th
 
 
 Could create a global function get_move_map so that it can be called inside class methods instead of hardcoding the same lines of code multiple times.
+
+In a game of chess, pawn, rook, bishop, king, queen cannot jump over other pieces.
+Only knight can jump over other pieces.

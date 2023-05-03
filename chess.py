@@ -80,54 +80,16 @@ class Player1():
         # In the game of chess, the order of block naming is file-rank,
         # but in two dimensional arrays, we go through rows first (rank) and then column (file)
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['P', 'White']:
-            move_set_list = []
+        if game.board[curr_index[0]][curr_index[1]] == ['P', self.player_color]:
+            print(f'A map of your possible moves for pawn at position {position}:')
 
-            # Checking if the piece the player is looking for is at the top of the board
-            if curr_index[0] < len(rank) - 1:
+            move_set_list = Pawn_possible_moves(game, curr_index, self.player_color)
 
-                # Conrer case 1 - far left
-                if curr_index[1] == 0:
-                    move_set_index = [curr_index[0] - 1, curr_index[1] + 1]
-                    if game.board[move_set_index[0]][move_set_index[1]] == ' ':
-                        move_set_list.append(move_set_index)
-
-                # Corner case 2 - far right
-                elif curr_index[1] == len(file) - 1:
-                    move_set_index = [curr_index[0] -1, curr_index[1] - 1]
-                    if game.board[move_set_index[0]][move_set_index[1]] == ' ':
-                        move_set_list.append(move_set_index)
-
-                # When the piece is not in the edge of the board
-                else:
-                    move_set_index = [[curr_index[0] - 1, curr_index[1] - 1], [curr_index[0] -1, curr_index[1] + 1]]
-                    for move in move_set_index:
-                        if game.board[move[0]][move[1]] == ' ':
-                            move_set_list.append(move)
-
-                move_let_list = []
-                for move in move_set_list:
-                    move_let_list.append([file[move[1]], rank[move[0]]])
-                move_set_let = [''.join(move) for move in move_let_list]
-
-                if len(move_set_let) == 2:
-                    print(f'Your possible moves for pawn at position {position} are {move_set_let[0]} and {move_set_let[1]}')
-                else:
-                    print(f'Your possible move for pawn at position {position} is {move_set_let[0]}')
-
-                # deepcopy is required so we don't alternate the original game.
-                move_map = copy.deepcopy(game)
-                for move in move_set_list:
-                    move_map.board[move[0]][move[1]] = '*'
-                print(f'A map of your possible moves for pawn at position {position}:')
-                return move_map.get_board()
-
-            # The pawn at the position given is at the top of the board.
-            else:
-                return (f"This pawn at position {position} cannot move forward")
-
-        else:
-            return ('Invalid input')
+            # Visualize possible moves
+            move_map = copy.deepcopy(game)
+            for move in move_set_list:
+                move_map.board[move[0]][move[1]] = '*'
+            return move_map.get_board()
 
 
     def possible_moves_for_bishop(self, position, game):
@@ -196,7 +158,6 @@ class Player1():
                 move_map.board[move[0]][move[1]] = '*'
             return move_map.get_board()
 
-    
 
 class Player2():
     def __init__(self, player, turn=False):
@@ -211,7 +172,6 @@ class Player2():
         self.player_color = game.player2_color
         if self.player_color == 'White':
             self.turn = True
-
 
 
 def Rook_possible_moves(game, index):
@@ -242,6 +202,7 @@ def Rook_possible_moves(game, index):
             move_set_list.append(ptr)
 
     return move_set_list
+
 
 def Knight_possible_moves(game, index):
     move_set_list = []
@@ -304,9 +265,6 @@ def Knight_possible_moves(game, index):
 
     return move_set_list
 
-    
-
-
 
 def Bishop_possible_moves(game, index):
     move_set_list = []
@@ -355,7 +313,6 @@ def King_possible_moves(game, index):
 def Queen_possible_moves(game, index):
     move_set_list = []
 
-    # Case 1
     ptr = index
     # surrounding three ranks of current index
     for rank_i in range(ptr[0] - 1, ptr[0] + 2):
@@ -366,5 +323,27 @@ def Queen_possible_moves(game, index):
                 # if it is within the range and not equal to previous index, check if block at this index is already filled in.
                 if game.board[rank_i][file_i] == ' ':
                     move_set_list.append([rank_i, file_i])
+
+    return move_set_list
+
+def Pawn_possible_moves(game, index, color):
+    move_set_list = []
+    
+    ptr = index
+    # White pawn's moves
+    if color == "White" and ptr[0] > 0:
+        # top two diagonal blocks of current index
+        for file_i in range(ptr[1] - 1, ptr[1] + 2, 2):
+            if file_i >= 0 and file_i < len(file):
+                if game.board[ptr[0] - 1][file_i] == ' ':
+                    move_set_list.append([ptr[0] - 1, file_i])
+
+    # Black pawn's moves
+    if color == "Black" and ptr[0] < len(rank):
+        # bottom two diagonal blocks of current index
+        for file_i in range(ptr[1] - 1, ptr[1] + 2, 2):
+            if file_i >= 0 and file_i < len(file):
+                if game.board[ptr[0] + 1][file_i] == ' ':
+                    move_set_list.append([ptr[0] + 1, file_i])
 
     return move_set_list

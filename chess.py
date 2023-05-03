@@ -159,16 +159,62 @@ class Player1():
             return move_map.get_board()
 
 
-    def move_pawn(self, position_from, position_to, game):
+    def move_pawn(self, position_from, position_to, game, player2):
+        if self.turn == False:
+            print("Wait for the other player to finishe their turn")
+            return
+
         curr_let = [loc for loc in position_from]
         next_let = [loc for loc in position_to]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
         move_set_list = Pawn_possible_moves(game, curr_index, self.player_color)
 
+
         if next_index in move_set_list:
             move_piece(game, curr_index, next_index)
             print(f'Pawn at {position_from} has been moved to {position_to}')
+            self.turn = False
+            player2.turn = True
+
+        return True
+
+    def move_rook(self, position_from, position_to, game, player2):
+        if self.turn == False:
+            print("Wait for the other player to finish their turn")
+            return
+
+        curr_let = [loc for loc in position_from]
+        next_let = [loc for loc in position_to]
+        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
+        next_index = [rank.index(next_let[1]), file.index(next_let[0])]
+        move_set_list = Rook_possible_moves(game, curr_index)
+
+        if next_index in move_set_list:
+            move_piece(game, curr_index, next_index)
+            print(f'Rook at {position_from} has been moved to {position_to}')
+            self.turn = False
+            player2.turn = True
+
+        return True
+
+    
+    def move_knight(self, position_from, position_to, game, player2):
+        if self.turn == False:
+            print("wait for the other player to finish their turn")
+            return
+
+        curr_let = [loc for loc in position_from]
+        next_let = [loc for loc in position_to]
+        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
+        next_index = [rank.index(next_let[1]), file.index(next_let[0])]
+        move_set_list = Knight_possible_moves(game, curr_index)
+
+        if next_index in move_set_list:
+            move_piece(game, curr_index, next_index)
+            print(f'Knight at {position_from} has been moved to {position_to}')
+            self.turn = False
+            player2.turn = True
 
         return True
     
@@ -265,7 +311,11 @@ class Player2():
             return move_map.get_board()
 
 
-    def move_pawn(self, position_from, position_to, game):
+    def move_pawn(self, position_from, position_to, game, player1):
+        if self.turn == False:
+            print("Wait for the other player to finish their turn.")
+            return
+        
         curr_let = [loc for loc in position_from]
         next_let = [loc for loc in position_to]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
@@ -275,11 +325,17 @@ class Player2():
         if next_index in move_set_list:
             move_piece(game, curr_index, next_index)
             print(f'Pawn at {position_from} has been moved to {position_to}')
+            self.turn = False
+            player1.turn = True
 
         return True
 
     
-    def move_rook(self, position_from, position_to, game):
+    def move_rook(self, position_from, position_to, game, player1):
+        if self.turn == False:
+            print("Wait for the other player to finish their turn.")
+            return
+
         curr_let = [loc for loc in position_from]
         next_let = [loc for loc in position_to]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
@@ -289,6 +345,28 @@ class Player2():
         if next_index in move_set_list:
             move_piece(game, curr_index, next_index)
             print(f'Rook at {position_from} has been moved to {position_to}')
+            self.turn = False
+            player1.turn = True
+
+        return True
+
+    
+    def move_knight(self, position_from, position_to, game, player1):
+        if self.turn == False:
+            print("wait for the other player to finish their turn")
+            return
+
+        curr_let = [loc for loc in position_from]
+        next_let = [loc for loc in position_to]
+        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
+        next_index = [rank.index(next_let[1]), file.index(next_let[0])]
+        move_set_list = Knight_possible_moves(game, curr_index)
+
+        if next_index in move_set_list:
+            move_piece(game, curr_index, next_index)
+            print(f'Knight at {position_from} has been moved to {position_to}')
+            self.turn = False
+            player1.turn = True
 
         return True
 

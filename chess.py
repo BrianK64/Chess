@@ -210,7 +210,19 @@ class Player2():
             for move in move_set_list:
                 move_map.board[move[0]][move[1]] = '*'
             return move_map.get_board()
+    
 
+    def possible_moves_for_bishop(self, position, game):
+        curr_let = [loc for loc in position]
+        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
+        if game.board[curr_index[0]][curr_index[1]] == ['B', self.player_color]:
+            print(f'A map of your possible moves for bishop at position {position}:')
+            move_set_list = Bishop_possible_moves(game, curr_index)
+
+            move_map = copy.deepcopy(game)
+            for move in move_set_list:
+                move_map.board[move[0]][move[1]] = '*'
+            return move_map.get_board()
 
 
 def Rook_possible_moves(game, index):

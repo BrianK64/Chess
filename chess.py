@@ -34,14 +34,14 @@ class Chess:
         self.board[0][0] = self.board[0][-1] = ['R', 'Black']
         self.board[0][1] = self.board[0][-2] = ['N', 'Black']
         self.board[0][2] = self.board[0][-3] = ['B', 'Black']
-        self.board[0][3] = ['K', 'Black']
-        self.board[0][4] = ['Q', 'Black']
+        self.board[0][3] = ['Q', 'Black']
+        self.board[0][4] = ['K', 'Black']
 
         self.board[-1][0] = self.board[-1][-1] = ['R', 'White']
         self.board[-1][1] = self.board[-1][-2] = ['N', 'White']
         self.board[-1][2] = self.board[-1][-3] = ['B', 'White']
-        self.board[-1][3] = ['K', 'White']
-        self.board[-1][4] = ['Q', 'White']
+        self.board[-1][3] = ['Q', 'White']
+        self.board[-1][4] = ['K', 'White']
 
 
         # Initialize second rank of each side
@@ -132,19 +132,6 @@ class Player1():
                 move_map.board[move[0]][move[1]] = '*'
             return move_map.get_board()
 
-    
-    def possible_moves_for_king(self, position, game):
-        curr_let = [loc for loc in position]
-        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['K', self.player_color]:
-            print(f'A map of your possible moves for king at position {position}:')
-            move_set_list =  King_possible_moves(game, curr_index)
-
-            move_map = copy.deepcopy(game)
-            for move in move_set_list:
-                move_map.board[move[0]][move[1]] = '*'
-            return move_map.get_board()
-
 
     def possible_moves_for_queen(self, position, game):
         curr_let = [loc for loc in position]
@@ -152,6 +139,19 @@ class Player1():
         if game.board[curr_index[0]][curr_index[1]] == ['Q', self.player_color]:
             print(f'A map of your possible moves for queen at position {position}:')
             move_set_list = Queen_possible_moves(game, curr_index)
+
+            move_map = copy.deepcopy(game)
+            for move in move_set_list:
+                move_map.board[move[0]][move[1]] = '*'
+            return move_map.get_board()
+
+    
+    def possible_moves_for_king(self, position, game):
+        curr_let = [loc for loc in position]
+        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
+        if game.board[curr_index[0]][curr_index[1]] == ['K', self.player_color]:
+            print(f'A map of your possible moves for king at position {position}:')
+            move_set_list =  King_possible_moves(game, curr_index)
 
             move_map = copy.deepcopy(game)
             for move in move_set_list:
@@ -238,18 +238,6 @@ class Player2():
                 move_map.board[move[0]][move[1]] = '*'
             return move_map.get_board()
 
-    def possible_moves_for_king(self, position, game):
-        curr_let = [loc for loc in position]
-        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['K', self.player_color]:
-            print(f'A map of your possible moves for king at position {position}:')
-            move_set_list = King_possible_moves(game, curr_index)
-
-            move_map = copy.deepcopy(game)
-            for move in move_set_list:
-                move_map.board[move[0]][move[1]] = '*'
-            return move_map.get_board()
-
 
     def possible_moves_for_queen(self, position, game):
         curr_let = [loc for loc in position]
@@ -257,6 +245,19 @@ class Player2():
         if game.board[curr_index[0]][curr_index[1]] == ['Q', self.player_color]:
             print(f'A map of your possible moves for queen at position {position}:')
             move_set_list = Queen_possible_moves(game, curr_index)
+
+            move_map = copy.deepcopy(game)
+            for move in move_set_list:
+                move_map.board[move[0]][move[1]] = '*'
+            return move_map.get_board()
+
+
+    def possible_moves_for_king(self, position, game):
+        curr_let = [loc for loc in position]
+        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
+        if game.board[curr_index[0]][curr_index[1]] == ['K', self.player_color]:
+            print(f'A map of your possible moves for king at position {position}:')
+            move_set_list = King_possible_moves(game, curr_index)
 
             move_map = copy.deepcopy(game)
             for move in move_set_list:
@@ -399,6 +400,8 @@ def Bishop_possible_moves(game, index):
         ptr = [ptr[0] - 1, ptr[1] - 1]
         if game.board[ptr[0]][ptr[1]] == ' ':
             move_set_list.append(ptr)
+        else:
+            break
 
     # Case 2: up-right
     ptr = index
@@ -406,6 +409,8 @@ def Bishop_possible_moves(game, index):
         ptr = [ptr[0] - 1, ptr[1] + 1]
         if game.board[ptr[0]][ptr[1]] == ' ':
             move_set_list.append(ptr)
+        else:
+            break
 
     # Case 3: down-left
     ptr = index
@@ -413,6 +418,8 @@ def Bishop_possible_moves(game, index):
         ptr = [ptr[0] + 1, ptr[1] - 1]
         if game.board[ptr[0]][ptr[1]] == ' ':
             move_set_list.append(ptr)
+        else:
+            break
 
     # Case 4: down-right
     ptr = index
@@ -420,21 +427,20 @@ def Bishop_possible_moves(game, index):
         ptr = [ptr[0] + 1, ptr[1] + 1]
         if game.board[ptr[0]][ptr[1]] == ' ':
             move_set_list.append(ptr)
+        else:
+            break
     
     return move_set_list
 
 
-def King_possible_moves(game, index):
+def Queen_possible_moves(game, index):
     move_set_list_cross = Rook_possible_moves(game, index)
     move_set_list_diagonal = Bishop_possible_moves(game, index)
     move_set_list = move_set_list_cross + move_set_list_diagonal
 
-    move_map = copy.deepcopy(game)
-    for move in move_set_list:
-        move_map.board[move[0]][move[1]] = '*'
     return move_set_list
 
-def Queen_possible_moves(game, index):
+def King_possible_moves(game, index):
     move_set_list = []
 
     ptr = index

@@ -18,3 +18,5 @@ p1.possible_moves_for_queen('e1', game)
 p1.possible_moves_for_pawn('h2', game)
 
 p2.possible_moves_for_pawn('c7', game)
+p2.possible_moves_for_rook('h8', game)
+p2.possible_moves_for_knight('g8', game)

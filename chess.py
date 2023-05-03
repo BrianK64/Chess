@@ -185,6 +185,33 @@ class Player2():
                 move_map.board[move[0]][move[1]] = '*'
             return move_map.get_board()
 
+    
+    def possible_moves_for_rook(self, position, game):
+        curr_let = [loc for loc in position]
+        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
+        if game.board[curr_index[0]][curr_index[1]] == ['R', self.player_color]:
+            print(f'A map of your possible moves for rook at position {position}:')
+            move_set_list = Rook_possible_moves(game, curr_index)
+
+            move_map = copy.deepcopy(game)
+            for move in move_set_list:
+                move_map.board[move[0]][move[1]] = '*'
+            return move_map.get_board()
+
+
+    def possible_moves_for_knight(self, position, game):
+        curr_let = [loc for loc in position]
+        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
+        if game.board[curr_index[0]][curr_index[1]] == ['N', self.player_color]:
+            print(f'A map of your possible moves for knight at position {position}:')
+            move_set_list = Knight_possible_moves(game, curr_index)
+
+            move_map = copy.deepcopy(game)
+            for move in move_set_list:
+                move_map.board[move[0]][move[1]] = '*'
+            return move_map.get_board()
+
+
 
 def Rook_possible_moves(game, index):
     move_set_list = []

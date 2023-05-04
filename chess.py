@@ -168,7 +168,11 @@ class Player1():
         next_let = [loc for loc in position_to]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
-        move_set_list = Pawn_possible_moves(game, curr_index, self.player_color)
+        if game.board[curr_index[0]][curr_index[1]] == ['P', self.player_color]:
+            move_set_list = Pawn_possible_moves(game, curr_index, self.player_color)
+        else:
+            print("Warning: Wrong Piece")
+            return False
 
 
         if next_index in move_set_list:
@@ -188,7 +192,11 @@ class Player1():
         next_let = [loc for loc in position_to]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
-        move_set_list = Rook_possible_moves(game, curr_index)
+        if game.board[curr_index[0]][curr_index[1]] == ['R', self.player_color]:
+            move_set_list = Rook_possible_moves(game, curr_index)
+        else:
+            print("Warning: Wrong Piece")
+            return False
 
         if next_index in move_set_list:
             move_piece(game, curr_index, next_index)
@@ -208,7 +216,11 @@ class Player1():
         next_let = [loc for loc in position_to]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
-        move_set_list = Knight_possible_moves(game, curr_index)
+        if game.board[curr_index[0]][curr_index[1]] == ['N', self.player_color]:
+            move_set_list = Knight_possible_moves(game, curr_index)
+        else:
+            print("Warning: Wrong Piece")
+            return False
 
         if next_index in move_set_list:
             move_piece(game, curr_index, next_index)
@@ -216,8 +228,34 @@ class Player1():
             self.turn = False
             player2.turn = True
 
-        return True
-    
+            return True
+        return False
+
+
+    def move_bishop(self, position_from, position_to, game, player2):
+        if self.turn == False:
+            print("wait for the other player to finish their turn")
+            return
+
+        curr_let = [loc for loc in position_from]
+        next_let = [loc for loc in position_to]
+        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
+        next_index = [rank.index(next_let[1]), file.index(next_let[0])]
+        if game.board[curr_index[0]][curr_index[1]] == ['B', self.player_color]:
+            move_set_list = Bishop_possible_moves(game, curr_index)
+        else:
+            print("Warning: Wrong Piece")
+            return False
+
+        if next_index in move_set_list:
+            move_piece(game, curr_index, next_index)
+            print(f'Bishop at {position_from} has been moved to {position_to}')
+            self.turn = False
+            player2.turn = True
+
+            return True
+        return False
+            
 
 class Player2():
     def __init__(self, player, turn=False):
@@ -320,7 +358,11 @@ class Player2():
         next_let = [loc for loc in position_to]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
-        move_set_list = Pawn_possible_moves(game, curr_index, self.player_color)
+        if game.board[curr_index[0]][curr_index[1]] == ['P', self.player_color]:
+            move_set_list = Pawn_possible_moves(game, curr_index, self.player_color)
+        else:
+            print("Warning: Wrong Piece")
+            return False
 
         if next_index in move_set_list:
             move_piece(game, curr_index, next_index)
@@ -340,7 +382,11 @@ class Player2():
         next_let = [loc for loc in position_to]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
-        move_set_list = Rook_possible_moves(game, curr_index)
+        if game.board[curr_index[0]][curr_index[1]] == ['R', self.player_color]:
+            move_set_list = Rook_possible_moves(game, curr_index)
+        else:
+            print("Warning: Wrong Piece")
+            return False
 
         if next_index in move_set_list:
             move_piece(game, curr_index, next_index)
@@ -354,13 +400,17 @@ class Player2():
     def move_knight(self, position_from, position_to, game, player1):
         if self.turn == False:
             print("wait for the other player to finish their turn")
-            return
+            return False
 
         curr_let = [loc for loc in position_from]
         next_let = [loc for loc in position_to]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
-        move_set_list = Knight_possible_moves(game, curr_index)
+        if game.board[curr_index[0]][curr_index[1]] == ['N', self.player_color]:
+            move_set_list = Knight_possible_moves(game, curr_index)
+        else:
+            print("Warning: Wrong Piece")
+            return False
 
         if next_index in move_set_list:
             move_piece(game, curr_index, next_index)
@@ -369,6 +419,31 @@ class Player2():
             player1.turn = True
 
         return True
+
+
+    def move_bishop(self, position_from, position_to, game, player1):
+        if self.turn == False:
+            print("wait for the other player to finish their turn")
+            return
+
+        curr_let = [loc for loc in position_from]
+        next_let = [loc for loc in position_to]
+        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
+        next_index = [rank.index(next_let[1]), file.index(next_let[0])]
+        if game.board[curr_index[0]][curr_index[1]] == ['B', self.player_color]:
+            move_set_list = Bishop_possible_moves(game, curr_index)
+        else:
+            print("Warning: Wrong Piece")
+            return False
+
+        if next_index in move_set_list:
+            move_piece(game, curr_index, next_index)
+            print(f'Bishop at {position_from} has been moved to {position_to}')
+            self.turn = False
+            player1.turn = True
+
+            return True
+        return False
 
 
 def Rook_possible_moves(game, index):

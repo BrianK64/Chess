@@ -25,7 +25,7 @@ p2.possible_moves_for_queen('d8', game)
 p2.possible_moves_for_king('e8', game)
 
 p1.move_pawn('a2', 'b3', game, p2)
-p2.move_pawn('e7', 'f6', game, p1)
+p2.move_pawn('c7', 'd6', game, p1)
 game.get_board()
 p1.possible_moves_for_rook('a1', game)
 p1.move_rook('a1', 'a5', game, p2)

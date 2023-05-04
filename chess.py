@@ -8,10 +8,8 @@ class Chess:
     
     def __init__(self):
         self.board = [[' ' for file in range(8)] for rank in range(8)]
-        self.player1 = ''
-        self.player1_color = ''
-        self.player2 = ''
-        self.player2_color = ''
+        self.player1 = None
+        self.player2 = None
 
         # For simplicity
         self.num_of_rank = 8
@@ -51,396 +49,400 @@ class Chess:
 
     def select_player(self):
         color = ['White', 'Black']
-        (self.player1_color, self.player2_color) = random.sample(color, 2)
-        print(f'{self.player1} has {self.player1_color} piece and {self.player2} has {self.player2_color} piece')
+        (self.player1.player_color, self.player2.player_color) = random.sample(color, 2)
+        print(f'{self.player1.player} has {self.player1.player_color} piece and {self.player2.player} has {self.player2.player_color} piece')
 
-        if self.player1_color == 'White':
-            return (f'{self.player1} goes first')
+        if self.player1.player_color == 'White':
+            self.player1.turn = True
+            return (f'{self.player1.player} goes first')
         else:
-            return (f'{self.player2} goes first')
+            self.player2.turn = True
+            return (f'{self.player2.player} goes first')
 
 
 class Player1():
-    def __init__(self, player, turn=False):
+    def __init__(self, game, player, turn=False):
+        self.game = game
         self.player = player
         self.player_color = ''
         self.turn = turn
     
-    def update_player(self, game):
-        game.player1 = self.player
+    def update_player(self):
+        self.game.player1 = self
 
-    def get_color(self, game):
-        self.player_color = game.player1_color
+    def get_color(self):
+        self.player_color = self.game.player1_color
         if self.player_color == 'White':
             self.turn = True
 
     
-    def possible_moves_for_pawn(self, position, game):
+    def possible_moves_for_pawn(self, position):
         curr_let = [loc for loc in position]
         # In the game of chess, the order of block naming is file-rank,
         # but in two dimensional arrays, we go through rows first (rank) and then column (file)
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['P', self.player_color]:
-            print(f'A map of your possible moves for pawn at position {position}:')
+        if self.game.board[curr_index[0]][curr_index[1]] == ['P', self.player_color]:
+            print(f'{self.player}:  A map of your possible moves for pawn at position {position}:')
 
-            move_set_list = Pawn_possible_moves(game, curr_index, self.player_color)
+            move_set_list = Pawn_possible_moves(self.game, curr_index, self.player_color)
 
             # Visualize possible moves
-            move_map = copy.deepcopy(game)
+            move_map = copy.deepcopy(self.game)
             for move in move_set_list:
                 move_map.board[move[0]][move[1]] = '*'
             return move_map.get_board()
 
 
-    def possible_moves_for_rook(self, position, game):
+    def possible_moves_for_rook(self, position):
         curr_let = [loc for loc in position]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['R', self.player_color]:
-            print(f'A map of your possible moves for rook at position {position}:')
-            move_set_list =  Rook_possible_moves(game, curr_index)
+        if self.game.board[curr_index[0]][curr_index[1]] == ['R', self.player_color]:
+            print(f'{self.player}:  A map of your possible moves for rook at position {position}:')
+            move_set_list =  Rook_possible_moves(self.game, curr_index)
 
-            move_map = copy.deepcopy(game)
+            move_map = copy.deepcopy(self.game)
             for move in move_set_list:
                 move_map.board[move[0]][move[1]] = '*'
             return move_map.get_board()
 
 
-    def possible_moves_for_knight(self, position, game):
+    def possible_moves_for_knight(self, position):
         curr_let = [loc for loc in position]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['N', self.player_color]:
-            print(f'A map of your possible moves for knight at position {position}:')
-            move_set_list = Knight_possible_moves(game, curr_index)
+        if self.game.board[curr_index[0]][curr_index[1]] == ['N', self.player_color]:
+            print(f'{self.player}:  A map of your possible moves for knight at position {position}:')
+            move_set_list = Knight_possible_moves(self.game, curr_index)
 
-            move_map = copy.deepcopy(game)
+            move_map = copy.deepcopy(self.game)
             for move in move_set_list:
                 move_map.board[move[0]][move[1]] = '*'
             return move_map.get_board()
 
     
-    def possible_moves_for_bishop(self, position, game):
+    def possible_moves_for_bishop(self, position):
         curr_let = [loc for loc in position]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['B', self.player_color]:
-            print(f'A map of your possible moves for bishop at position {position}:')
+        if self.game.board[curr_index[0]][curr_index[1]] == ['B', self.player_color]:
+            print(f'{self.player}:  A map of your possible moves for bishop at position {position}:')
 
-            move_set_list = Bishop_possible_moves(game, curr_index)
+            move_set_list = Bishop_possible_moves(self.game, curr_index)
 
             # Visualize possible moves
-            move_map = copy.deepcopy(game)
+            move_map = copy.deepcopy(self.game)
             for move in move_set_list:
                 move_map.board[move[0]][move[1]] = '*'
             return move_map.get_board()
 
 
-    def possible_moves_for_queen(self, position, game):
+    def possible_moves_for_queen(self, position):
         curr_let = [loc for loc in position]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['Q', self.player_color]:
-            print(f'A map of your possible moves for queen at position {position}:')
-            move_set_list = Queen_possible_moves(game, curr_index)
+        if self.game.board[curr_index[0]][curr_index[1]] == ['Q', self.player_color]:
+            print(f'{self.player}:  A map of your possible moves for queen at position {position}:')
+            move_set_list = Queen_possible_moves(self.game, curr_index)
 
-            move_map = copy.deepcopy(game)
+            move_map = copy.deepcopy(self.game)
             for move in move_set_list:
                 move_map.board[move[0]][move[1]] = '*'
             return move_map.get_board()
 
     
-    def possible_moves_for_king(self, position, game):
+    def possible_moves_for_king(self, position):
         curr_let = [loc for loc in position]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['K', self.player_color]:
-            print(f'A map of your possible moves for king at position {position}:')
-            move_set_list =  King_possible_moves(game, curr_index)
+        if self.game.board[curr_index[0]][curr_index[1]] == ['K', self.player_color]:
+            print(f'{self.player}:  A map of your possible moves for king at position {position}:')
+            move_set_list =  King_possible_moves(self.game, curr_index)
 
-            move_map = copy.deepcopy(game)
+            move_map = copy.deepcopy(self.game)
             for move in move_set_list:
                 move_map.board[move[0]][move[1]] = '*'
             return move_map.get_board()
 
 
-    def move_pawn(self, position_from, position_to, game, player2):
+    def move_pawn(self, position_from, position_to):
         if self.turn == False:
-            print("Wait for the other player to finishe their turn")
+            print(f"{self.player}:  Wait for the other player to finishe their turn")
             return
 
         curr_let = [loc for loc in position_from]
         next_let = [loc for loc in position_to]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['P', self.player_color]:
-            move_set_list = Pawn_possible_moves(game, curr_index, self.player_color)
+        if self.game.board[curr_index[0]][curr_index[1]] == ['P', self.player_color]:
+            move_set_list = Pawn_possible_moves(self.game, curr_index, self.player_color)
         else:
-            print("Warning: Wrong Piece")
+            print(f"{self.player}:  Warning: Wrong Piece")
             return False
 
 
         if next_index in move_set_list:
-            move_piece(game, curr_index, next_index)
-            print(f'Pawn at {position_from} has been moved to {position_to}')
+            move_piece(self.game, curr_index, next_index)
+            print(f'{self.player}:  Pawn at {position_from} has been moved to {position_to}')
             self.turn = False
-            player2.turn = True
+            self.game.player2.turn = True
 
         return True
 
-    def move_rook(self, position_from, position_to, game, player2):
+    def move_rook(self, position_from, position_to):
         if self.turn == False:
-            print("Wait for the other player to finish their turn")
+            print(f"{self.player}:  Wait for the other player to finish their turn")
             return
 
         curr_let = [loc for loc in position_from]
         next_let = [loc for loc in position_to]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['R', self.player_color]:
-            move_set_list = Rook_possible_moves(game, curr_index)
+        if self.game.board[curr_index[0]][curr_index[1]] == ['R', self.player_color]:
+            move_set_list = Rook_possible_moves(self.game, curr_index)
         else:
-            print("Warning: Wrong Piece")
+            print(f"{self.player}:  Warning: Wrong Piece")
             return False
 
         if next_index in move_set_list:
-            move_piece(game, curr_index, next_index)
-            print(f'Rook at {position_from} has been moved to {position_to}')
+            move_piece(self.game, curr_index, next_index)
+            print(f'{self.player}: Rook at {position_from} has been moved to {position_to}')
             self.turn = False
-            player2.turn = True
+            self.game.player2.turn = True
 
         return True
 
     
-    def move_knight(self, position_from, position_to, game, player2):
+    def move_knight(self, position_from, position_to):
         if self.turn == False:
-            print("wait for the other player to finish their turn")
+            print(f"{self.player}:  wait for the other player to finish their turn")
             return
 
         curr_let = [loc for loc in position_from]
         next_let = [loc for loc in position_to]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['N', self.player_color]:
-            move_set_list = Knight_possible_moves(game, curr_index)
+        if self.game.board[curr_index[0]][curr_index[1]] == ['N', self.player_color]:
+            move_set_list = Knight_possible_moves(self.game, curr_index)
         else:
-            print("Warning: Wrong Piece")
+            print(f"{self.player}:  Warning: Wrong Piece")
             return False
 
         if next_index in move_set_list:
-            move_piece(game, curr_index, next_index)
-            print(f'Knight at {position_from} has been moved to {position_to}')
+            move_piece(self.game, curr_index, next_index)
+            print(f'{self.player}:  Knight at {position_from} has been moved to {position_to}')
             self.turn = False
-            player2.turn = True
+            self.game.player2.turn = True
 
             return True
         return False
 
 
-    def move_bishop(self, position_from, position_to, game, player2):
+    def move_bishop(self, position_from, position_to):
         if self.turn == False:
-            print("wait for the other player to finish their turn")
+            print(f"{self.player}:  wait for the other player to finish their turn")
             return
 
         curr_let = [loc for loc in position_from]
         next_let = [loc for loc in position_to]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['B', self.player_color]:
-            move_set_list = Bishop_possible_moves(game, curr_index)
+        if self.game.board[curr_index[0]][curr_index[1]] == ['B', self.player_color]:
+            move_set_list = Bishop_possible_moves(self.game, curr_index)
         else:
-            print("Warning: Wrong Piece")
+            print(f"{self.player}:  Warning: Wrong Piece")
             return False
 
         if next_index in move_set_list:
-            move_piece(game, curr_index, next_index)
-            print(f'Bishop at {position_from} has been moved to {position_to}')
+            move_piece(self.game, curr_index, next_index)
+            print(f'{self.player}:  Bishop at {position_from} has been moved to {position_to}')
             self.turn = False
-            player2.turn = True
+            self.game.player2.turn = True
 
             return True
         return False
             
 
 class Player2():
-    def __init__(self, player, turn=False):
+    def __init__(self, game, player, turn=False):
+        self.game = game
         self.player = player
         self.player_color = ''
         self.turn = turn
 
-    def update_player(self, game):
-        game.player2 = self.player
+    def update_player(self):
+        self.game.player2 = self
 
-    def get_color(self, game):
-        self.player_color = game.player2_color
+    def get_color(self):
+        self.player_color = self.game.player2_color
         if self.player_color == 'White':
             self.turn = True
 
-    def possible_moves_for_pawn(self, position, game):
+    def possible_moves_for_pawn(self, position):
         curr_let = [loc for loc in position]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['P', self.player_color]:
-            print(f'A map of your possible moves for pawn at position {position}:')
-            move_set_list = Pawn_possible_moves(game, curr_index, self.player_color)
+        if self.game.board[curr_index[0]][curr_index[1]] == ['P', self.player_color]:
+            print(f'{self.player}:  A map of your possible moves for pawn at position {position}:')
+            move_set_list = Pawn_possible_moves(self.game, curr_index, self.player_color)
 
-            move_map = copy.deepcopy(game)
+            move_map = copy.deepcopy(self.game)
             for move in move_set_list:
                 move_map.board[move[0]][move[1]] = '*'
             return move_map.get_board()
 
     
-    def possible_moves_for_rook(self, position, game):
+    def possible_moves_for_rook(self, position):
         curr_let = [loc for loc in position]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['R', self.player_color]:
-            print(f'A map of your possible moves for rook at position {position}:')
-            move_set_list = Rook_possible_moves(game, curr_index)
+        if self.game.board[curr_index[0]][curr_index[1]] == ['R', self.player_color]:
+            print(f'{self.player}:  A map of your possible moves for rook at position {position}:')
+            move_set_list = Rook_possible_moves(self.game, curr_index)
 
-            move_map = copy.deepcopy(game)
+            move_map = copy.deepcopy(self.game)
             for move in move_set_list:
                 move_map.board[move[0]][move[1]] = '*'
             return move_map.get_board()
 
 
-    def possible_moves_for_knight(self, position, game):
+    def possible_moves_for_knight(self, position):
         curr_let = [loc for loc in position]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['N', self.player_color]:
-            print(f'A map of your possible moves for knight at position {position}:')
-            move_set_list = Knight_possible_moves(game, curr_index)
+        if self.game.board[curr_index[0]][curr_index[1]] == ['N', self.player_color]:
+            print(f'{self.player}:  A map of your possible moves for knight at position {position}:')
+            move_set_list = Knight_possible_moves(self.game, curr_index)
 
-            move_map = copy.deepcopy(game)
+            move_map = copy.deepcopy(self.game)
             for move in move_set_list:
                 move_map.board[move[0]][move[1]] = '*'
             return move_map.get_board()
     
 
-    def possible_moves_for_bishop(self, position, game):
+    def possible_moves_for_bishop(self, position):
         curr_let = [loc for loc in position]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['B', self.player_color]:
-            print(f'A map of your possible moves for bishop at position {position}:')
-            move_set_list = Bishop_possible_moves(game, curr_index)
+        if self.game.board[curr_index[0]][curr_index[1]] == ['B', self.player_color]:
+            print(f'{self.player}:  A map of your possible moves for bishop at position {position}:')
+            move_set_list = Bishop_possible_moves(self.game, curr_index)
 
-            move_map = copy.deepcopy(game)
+            move_map = copy.deepcopy(self.game)
             for move in move_set_list:
                 move_map.board[move[0]][move[1]] = '*'
             return move_map.get_board()
 
 
-    def possible_moves_for_queen(self, position, game):
+    def possible_moves_for_queen(self, position):
         curr_let = [loc for loc in position]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['Q', self.player_color]:
-            print(f'A map of your possible moves for queen at position {position}:')
-            move_set_list = Queen_possible_moves(game, curr_index)
+        if self.game.board[curr_index[0]][curr_index[1]] == ['Q', self.player_color]:
+            print(f'{self.player}:  A map of your possible moves for queen at position {position}:')
+            move_set_list = Queen_possible_moves(self.game, curr_index)
 
-            move_map = copy.deepcopy(game)
+            move_map = copy.deepcopy(self.game)
             for move in move_set_list:
                 move_map.board[move[0]][move[1]] = '*'
             return move_map.get_board()
 
 
-    def possible_moves_for_king(self, position, game):
+    def possible_moves_for_king(self, position):
         curr_let = [loc for loc in position]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['K', self.player_color]:
-            print(f'A map of your possible moves for king at position {position}:')
-            move_set_list = King_possible_moves(game, curr_index)
+        if self.game.board[curr_index[0]][curr_index[1]] == ['K', self.player_color]:
+            print(f'{self.player}:  A map of your possible moves for king at position {position}:')
+            move_set_list = King_possible_moves(self.game, curr_index)
 
-            move_map = copy.deepcopy(game)
+            move_map = copy.deepcopy(self.game)
             for move in move_set_list:
                 move_map.board[move[0]][move[1]] = '*'
             return move_map.get_board()
 
 
-    def move_pawn(self, position_from, position_to, game, player1):
+    def move_pawn(self, position_from, position_to):
         if self.turn == False:
-            print("Wait for the other player to finish their turn.")
+            print(f"{self.player}:  Wait for the other player to finish their turn.")
             return
         
         curr_let = [loc for loc in position_from]
         next_let = [loc for loc in position_to]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['P', self.player_color]:
-            move_set_list = Pawn_possible_moves(game, curr_index, self.player_color)
+        if self.game.board[curr_index[0]][curr_index[1]] == ['P', self.player_color]:
+            move_set_list = Pawn_possible_moves(self.game, curr_index, self.player_color)
         else:
-            print("Warning: Wrong Piece")
+            print(f"{self.player}:  Warning: Wrong Piece")
             return False
 
         if next_index in move_set_list:
-            move_piece(game, curr_index, next_index)
-            print(f'Pawn at {position_from} has been moved to {position_to}')
+            move_piece(self.game, curr_index, next_index)
+            print(f'{self.player}:  Pawn at {position_from} has been moved to {position_to}')
             self.turn = False
-            player1.turn = True
+            self.game.player1.turn = True
 
         return True
 
     
-    def move_rook(self, position_from, position_to, game, player1):
+    def move_rook(self, position_from, position_to):
         if self.turn == False:
-            print("Wait for the other player to finish their turn.")
+            print(f"{self.player}:  Wait for the other player to finish their turn.")
             return
 
         curr_let = [loc for loc in position_from]
         next_let = [loc for loc in position_to]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['R', self.player_color]:
-            move_set_list = Rook_possible_moves(game, curr_index)
+        if self.game.board[curr_index[0]][curr_index[1]] == ['R', self.player_color]:
+            move_set_list = Rook_possible_moves(self.game, curr_index)
         else:
-            print("Warning: Wrong Piece")
+            print(f"{self.player}:  Warning: Wrong Piece")
             return False
 
         if next_index in move_set_list:
-            move_piece(game, curr_index, next_index)
-            print(f'Rook at {position_from} has been moved to {position_to}')
+            move_piece(self.game, curr_index, next_index)
+            print(f'{self.player}:  Rook at {position_from} has been moved to {position_to}')
             self.turn = False
-            player1.turn = True
+            self.game.player1.turn = True
 
         return True
 
     
-    def move_knight(self, position_from, position_to, game, player1):
+    def move_knight(self, position_from, position_to):
         if self.turn == False:
-            print("wait for the other player to finish their turn")
+            print(f"{self.player}:  wait for the other player to finish their turn")
             return False
 
         curr_let = [loc for loc in position_from]
         next_let = [loc for loc in position_to]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['N', self.player_color]:
-            move_set_list = Knight_possible_moves(game, curr_index)
+        if self.game.board[curr_index[0]][curr_index[1]] == ['N', self.player_color]:
+            move_set_list = Knight_possible_moves(self.game, curr_index)
         else:
-            print("Warning: Wrong Piece")
+            print(f"{self.player}:  Warning: Wrong Piece")
             return False
 
         if next_index in move_set_list:
-            move_piece(game, curr_index, next_index)
-            print(f'Knight at {position_from} has been moved to {position_to}')
+            move_piece(self.game, curr_index, next_index)
+            print(f'{self.player}:  Knight at {position_from} has been moved to {position_to}')
             self.turn = False
-            player1.turn = True
+            self.game.player1.turn = True
 
         return True
 
 
-    def move_bishop(self, position_from, position_to, game, player1):
+    def move_bishop(self, position_from, position_to):
         if self.turn == False:
-            print("wait for the other player to finish their turn")
+            print(f"{self.player}:  wait for the other player to finish their turn")
             return
 
         curr_let = [loc for loc in position_from]
         next_let = [loc for loc in position_to]
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
-        if game.board[curr_index[0]][curr_index[1]] == ['B', self.player_color]:
-            move_set_list = Bishop_possible_moves(game, curr_index)
+        if self.game.board[curr_index[0]][curr_index[1]] == ['B', self.player_color]:
+            move_set_list = Bishop_possible_moves(self.game, curr_index)
         else:
-            print("Warning: Wrong Piece")
+            print(f"{self.player}:  Warning: Wrong Piece")
             return False
 
         if next_index in move_set_list:
-            move_piece(game, curr_index, next_index)
-            print(f'Bishop at {position_from} has been moved to {position_to}')
+            move_piece(self.game, curr_index, next_index)
+            print(f'{self.player}:  Bishop at {position_from} has been moved to {position_to}')
             self.turn = False
-            player1.turn = True
+            self.game.player1.turn = True
 
             return True
         return False
@@ -490,7 +492,7 @@ def Knight_possible_moves(game, index):
     if ptr[0] -1 >= 0 and ptr[1] - 2 > 0:
         ptr = [ptr[0] - 1, ptr[1] - 2]
         if game.board[ptr[0]][ptr[1]] == ' ':
-            move_set_list.appent(ptr)
+            move_set_list.append(ptr)
     
     # two-up one-left
     ptr = index

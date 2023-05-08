@@ -66,6 +66,7 @@ class Player1():
         self.player = player
         self.player_color = ''
         self.turn = turn
+        self.point = 0
     
     def update_player(self):
         self.game.player1 = self
@@ -85,11 +86,14 @@ class Player1():
             print(f'{self.player}:  A map of your possible moves for pawn at position {position}:')
 
             move_set_list = Pawn_possible_moves(self.game, curr_index, self.player_color)
-
+            
             # Visualize possible moves
             move_map = copy.deepcopy(self.game)
             for move in move_set_list:
-                move_map.board[move[0]][move[1]] = '*'
+                if self.game.board[move[0]][move[1]] == ' ':
+                    move_map.board[move[0]][move[1]] = '*'
+                elif self.game.board[move[0]][move[1]][1] != self.player_color:
+                    move_map.board[move[0]][move[1]] = '@'
             return move_map.get_board()
 
 
@@ -314,6 +318,7 @@ class Player2():
         self.player = player
         self.player_color = ''
         self.turn = turn
+        self.point = 0
 
     def update_player(self):
         self.game.player2 = self
@@ -329,10 +334,13 @@ class Player2():
         if self.game.board[curr_index[0]][curr_index[1]] == ['P', self.player_color]:
             print(f'{self.player}:  A map of your possible moves for pawn at position {position}:')
             move_set_list = Pawn_possible_moves(self.game, curr_index, self.player_color)
-
+            
             move_map = copy.deepcopy(self.game)
             for move in move_set_list:
-                move_map.board[move[0]][move[1]] = '*'
+                if self.game.board[move[0]][move[1]] == ' ':
+                    move_map.board[move[0]][move[1]] = '*'
+                elif self.game.board[move[0]][move[1]][1] != self.player_color:
+                    move_map.board[move[0]][move[1]] = '@'
             return move_map.get_board()
 
     
@@ -417,6 +425,19 @@ class Player2():
             return False
 
         if next_index in move_set_list:
+            if self.game.board[next_index[0]][next_index[1]][0] == 'P':
+                self.point += 1
+            elif self.game.board[next_index[0]][next_index[1]][0] == 'N':
+                self.point += 3
+            elif self.game.board[next_index[0]][next_index[1]][0] == 'B':
+                self.point += 3
+            elif self.game.board[next_index[0]][next_index[1]][0] == 'R':
+                self.point += 5
+            elif self.game.board[next_index[0]][next_index[1]][0] == 'Q':
+                self.point += 9
+            elif self.game.board[next_index[0]][next_index[1]][0] == 'K':
+                
+                return(f'{self.player}: You have captured the oppoent\'s king piece, you won the match')
             move_piece(self.game, curr_index, next_index)
             print(f'{self.player}:  Pawn at {position_from} has been moved to {position_to}')
             self.turn = False
@@ -720,7 +741,7 @@ def Pawn_possible_moves(game, index, color):
         # top two diagonal blocks of current index
         for file_i in range(ptr[1] - 1, ptr[1] + 2, 2):
             if file_i >= 0 and file_i < len(file):
-                if game.board[ptr[0] - 1][file_i] == ' ':
+                if game.board[ptr[0] - 1][file_i] == ' ' or game.board[ptr[0] - 1][file_i][1] != color:
                     move_set_list.append([ptr[0] - 1, file_i])
 
     # Black pawn's moves
@@ -728,7 +749,7 @@ def Pawn_possible_moves(game, index, color):
         # bottom two diagonal blocks of current index
         for file_i in range(ptr[1] - 1, ptr[1] + 2, 2):
             if file_i >= 0 and file_i < len(file):
-                if game.board[ptr[0] + 1][file_i] == ' ':
+                if game.board[ptr[0] + 1][file_i] == ' ' or game.board[ptr[0] + 1][file_i][1] != color:
                     move_set_list.append([ptr[0] + 1, file_i])
 
     return move_set_list

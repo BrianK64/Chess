@@ -256,6 +256,56 @@ class Player1():
 
             return True
         return False
+
+
+    def move_queen(self, position_from, position_to):
+        if self.turn == False:
+            print(f"{self.player}:  wait for the other player to finish their turn")
+            return
+
+        curr_let = [loc for loc in position_from]
+        next_let = [loc for loc in position_to]
+        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
+        next_index = [rank.index(next_let[1]), file.index(next_let[0])]
+        if self.game.board[curr_index[0]][curr_index[1]] == ['Q', self.player_color]:
+            move_set_list = Queen_possible_moves(self.game, curr_index)
+        else:
+            print(f"{self.player}:  Warning: Wrong Piece")
+            return False
+
+        if next_index in move_set_list:
+            move_piece(self.game, curr_index, next_index)
+            print(f'{self.player}:  Queen at {position_from} has been moved to {position_to}')
+            self.turn = False
+            self.game.player2.turn = True
+
+            return True
+        return False
+
+
+    def move_king(self, position_from, position_to):
+        if self.turn == False:
+            print(f"{self.player}:  wait for the other player to finish their turn")
+            return
+
+        curr_let = [loc for loc in position_from]
+        next_let = [loc for loc in position_to]
+        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
+        next_index = [rank.index(next_let[1]), file.index(next_let[0])]
+        if self.game.board[curr_index[0]][curr_index[1]] == ['K', self.player_color]:
+            move_set_list = King_possible_moves(self.game, curr_index)
+        else:
+            print(f"{self.player}:  Warning: Wrong Piece")
+            return False
+
+        if next_index in move_set_list:
+            move_piece(self.game, curr_index, next_index)
+            print(f'{self.player}:  King at {position_from} has been moved to {position_to}')
+            self.turn = False
+            self.game.player2.turn = True
+
+            return True
+        return False
             
 
 class Player2():
@@ -443,6 +493,56 @@ class Player2():
             print(f'{self.player}:  Bishop at {position_from} has been moved to {position_to}')
             self.turn = False
             self.game.player1.turn = True
+
+            return True
+        return False
+
+
+    def move_queen(self, position_from, position_to):
+        if self.turn == False:
+            print(f"{self.player}:  wait for the other player to finish their turn")
+            return
+
+        curr_let = [loc for loc in position_from]
+        next_let = [loc for loc in position_to]
+        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
+        next_index = [rank.index(next_let[1]), file.index(next_let[0])]
+        if self.game.board[curr_index[0]][curr_index[1]] == ['Q', self.player_color]:
+            move_set_list = Queen_possible_moves(self.game, curr_index)
+        else:
+            print(f"{self.player}:  Warning: Wrong Piece")
+            return False
+
+        if next_index in move_set_list:
+            move_piece(self.game, curr_index, next_index)
+            print(f'{self.player}:  Queen at {position_from} has been moved to {position_to}')
+            self.turn = False
+            self.game.player2.turn = True
+
+            return True
+        return False
+
+
+    def move_king(self, position_from, position_to):
+        if self.turn == False:
+            print(f"{self.player}:  wait for the other player to finish their turn")
+            return
+
+        curr_let = [loc for loc in position_from]
+        next_let = [loc for loc in position_to]
+        curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
+        next_index = [rank.index(next_let[1]), file.index(next_let[0])]
+        if self.game.board[curr_index[0]][curr_index[1]] == ['K', self.player_color]:
+            move_set_list = King_possible_moves(self.game, curr_index)
+        else:
+            print(f"{self.player}:  Warning: Wrong Piece")
+            return False
+
+        if next_index in move_set_list:
+            move_piece(self.game, curr_index, next_index)
+            print(f'{self.player}:  King at {position_from} has been moved to {position_to}')
+            self.turn = False
+            self.game.player2.turn = True
 
             return True
         return False

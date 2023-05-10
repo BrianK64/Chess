@@ -102,11 +102,15 @@ class Player1():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         if self.game.board[curr_index[0]][curr_index[1]] == ['R', self.player_color]:
             print(f'{self.player}:  A map of your possible moves for rook at position {position}:')
-            move_set_list =  Rook_possible_moves(self.game, curr_index)
+            move_set_list =  Rook_possible_moves(self.game, curr_index, self.player_color)
 
             move_map = copy.deepcopy(self.game)
-            for move in move_set_list:
-                move_map.board[move[0]][move[1]] = '*'
+            for move in move_set_list: 
+                if self.game.board[move[0]][move[1]] == ' ':
+                    move_map.board[move[0]][move[1]] = '*'
+                elif self.game.board[move[0]][move[1]][1] != self.player_color:
+                    move_map.board[move[0]][move[1]] = '@'
+                
             return move_map.get_board()
 
 
@@ -181,6 +185,25 @@ class Player1():
 
 
         if next_index in move_set_list:
+            if self.game.board[next_index[0]][next_index[1]][0] == 'P':
+                self.point += 1
+                print(f'{self.player}:  You have captured the opponent\'s pawn, you earned 1 point')
+            elif self.game.board[next_index[0]][next_index[1]][0] == 'N':
+                self.point += 3
+                print(f'{self.player}:  You have captured the opponent\'s knight, you earned 3 points')
+            elif self.game.board[next_index[0]][next_index[1]][0] == 'B':
+                self.point += 3
+                print(f'{self.player}:  You have captured the opponent\'s bishiop, you earned 3 points')
+            elif self.game.board[next_index[0]][next_index[1]][0] == 'R':
+                self.point += 5
+                print(f'{self.player}:  You have captured the opponent\'s rook, you earned 5 points')
+            elif self.game.board[next_index[0]][next_index[1]][0] == 'Q':
+                self.point += 9
+                print(f'{self.player}:  You have captured the opponent\s queen, you earned 9 points')
+            elif self.game.board[next_index[0]][next_index[1]][0] == 'K':
+                # Reset the game or update the game so that it cannot be played anymore 
+                print(f'{self.player}: You have captured the oppoent\'s king, you won the match')
+                return True
             move_piece(self.game, curr_index, next_index)
             print(f'{self.player}:  Pawn at {position_from} has been moved to {position_to}')
             self.turn = False
@@ -198,7 +221,7 @@ class Player1():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
         if self.game.board[curr_index[0]][curr_index[1]] == ['R', self.player_color]:
-            move_set_list = Rook_possible_moves(self.game, curr_index)
+            move_set_list = Rook_possible_moves(self.game, curr_index, self.player_color)
         else:
             print(f"{self.player}:  Warning: Wrong Piece")
             return False
@@ -349,11 +372,14 @@ class Player2():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         if self.game.board[curr_index[0]][curr_index[1]] == ['R', self.player_color]:
             print(f'{self.player}:  A map of your possible moves for rook at position {position}:')
-            move_set_list = Rook_possible_moves(self.game, curr_index)
+            move_set_list = Rook_possible_moves(self.game, curr_index, self.player_color)
 
             move_map = copy.deepcopy(self.game)
             for move in move_set_list:
-                move_map.board[move[0]][move[1]] = '*'
+                if self.game.board[move[0]][move[1]] == ' ':
+                    move_map.board[move[0]][move[1]] = '*'
+                elif self.game.board[move[0]][move[1]][1] != self.player_color:
+                    move_map.board[move[0]][move[1]] = '@'
             return move_map.get_board()
 
 
@@ -427,17 +453,23 @@ class Player2():
         if next_index in move_set_list:
             if self.game.board[next_index[0]][next_index[1]][0] == 'P':
                 self.point += 1
+                print(f'{self.player}:  You have captured the opponent\'s pawn, you earned 1 point')
             elif self.game.board[next_index[0]][next_index[1]][0] == 'N':
                 self.point += 3
+                print(f'{self.player}:  You have captured the opponent\'s knight, you earned 3 points')
             elif self.game.board[next_index[0]][next_index[1]][0] == 'B':
                 self.point += 3
+                print(f'{self.player}:  You have captured the opponent\'s bishiop, you earned 3 points')
             elif self.game.board[next_index[0]][next_index[1]][0] == 'R':
                 self.point += 5
+                print(f'{self.player}:  You have captured the opponent\'s rook, you earned 5 points')
             elif self.game.board[next_index[0]][next_index[1]][0] == 'Q':
                 self.point += 9
+                print(f'{self.player}:  You have captured the opponent\s queen, you earned 9 points')
             elif self.game.board[next_index[0]][next_index[1]][0] == 'K':
-                
-                return(f'{self.player}: You have captured the oppoent\'s king piece, you won the match')
+                # Reset the game or update the game so that it cannot be played anymore 
+                print(f'{self.player}: You have captured the oppoent\'s king, you won the match')
+                return True
             move_piece(self.game, curr_index, next_index)
             print(f'{self.player}:  Pawn at {position_from} has been moved to {position_to}')
             self.turn = False
@@ -456,7 +488,7 @@ class Player2():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
         if self.game.board[curr_index[0]][curr_index[1]] == ['R', self.player_color]:
-            move_set_list = Rook_possible_moves(self.game, curr_index)
+            move_set_list = Rook_possible_moves(self.game, curr_index, self.player_color)
         else:
             print(f"{self.player}:  Warning: Wrong Piece")
             return False
@@ -569,7 +601,7 @@ class Player2():
         return False
 
 
-def Rook_possible_moves(game, index):
+def Rook_possible_moves(game, index, color):
     move_set_list = []
 
     ptr = index
@@ -578,6 +610,8 @@ def Rook_possible_moves(game, index):
         if game.board[ptr[0]][ptr[1]] == ' ':
             move_set_list.append(ptr)
         else:
+            if game.board[ptr[0]][ptr[1]][1] != color:
+                move_set_list.append(ptr)
             break
 
     ptr = index
@@ -586,6 +620,8 @@ def Rook_possible_moves(game, index):
         if game.board[ptr[0]][ptr[1]] == ' ':
             move_set_list.append(ptr)
         else:
+            if game.board[ptr[0]][ptr[1]][1] != color:
+                move_set_list.append(ptr)
             break
 
     ptr = index
@@ -594,6 +630,8 @@ def Rook_possible_moves(game, index):
         if game.board[ptr[0]][ptr[1]] == ' ':
             move_set_list.append(ptr)
         else:
+            if game.board[ptr[0]][ptr[1]][1] != color:
+                move_set_list.append(ptr)
             break
     
     ptr = index
@@ -601,6 +639,10 @@ def Rook_possible_moves(game, index):
         ptr = [ptr[0], ptr[1] + 1]
         if game.board[ptr[0]][ptr[1]] == ' ':
             move_set_list.append(ptr)
+        else:
+            if game.board[ptr[0]][ptr[1]][1] != color:
+                move_set_list.append(ptr)
+            break
 
     return move_set_list
 

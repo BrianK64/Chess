@@ -255,8 +255,10 @@ class Player1():
             return False
 
         if next_index in move_set_list:
+            prev = self.game.board[next_index[0]][next_index[1]][0]
             move_piece(self.game, curr_index, next_index)
             print(f'{self.player}:  Knight at {position_from} has been moved to {position_to}')
+            print(point_system(self, prev))
             self.turn = False
             self.game.player2.turn = True
 
@@ -527,8 +529,10 @@ class Player2():
             return False
 
         if next_index in move_set_list:
+            prev = self.game.board[next_index[0]][next_index[1]][0]
             move_piece(self.game, curr_index, next_index)
             print(f'{self.player}:  Knight at {position_from} has been moved to {position_to}')
+            print(point_system(self, prev))
             self.turn = False
             self.game.player1.turn = True
 

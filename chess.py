@@ -119,11 +119,14 @@ class Player1():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         if self.game.board[curr_index[0]][curr_index[1]] == ['N', self.player_color]:
             print(f'{self.player}:  A map of your possible moves for knight at position {position}:')
-            move_set_list = Knight_possible_moves(self.game, curr_index)
+            move_set_list = Knight_possible_moves(self.game, curr_index, self.player_color)
 
             move_map = copy.deepcopy(self.game)
             for move in move_set_list:
-                move_map.board[move[0]][move[1]] = '*'
+                if self.game.board[move[0]][move[1]] == ' ':
+                    move_map.board[move[0]][move[1]] = '*'
+                elif self.game.board[move[0]][move[1]][1] != self.player_color:
+                    move_map.board[move[0]][move[1]] = '@'
             return move_map.get_board()
 
     
@@ -246,7 +249,7 @@ class Player1():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
         if self.game.board[curr_index[0]][curr_index[1]] == ['N', self.player_color]:
-            move_set_list = Knight_possible_moves(self.game, curr_index)
+            move_set_list = Knight_possible_moves(self.game, curr_index, self.player_color)
         else:
             print(f"{self.player}:  Warning: Wrong Piece")
             return False
@@ -389,11 +392,14 @@ class Player2():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         if self.game.board[curr_index[0]][curr_index[1]] == ['N', self.player_color]:
             print(f'{self.player}:  A map of your possible moves for knight at position {position}:')
-            move_set_list = Knight_possible_moves(self.game, curr_index)
+            move_set_list = Knight_possible_moves(self.game, curr_index, self.player_color)
 
             move_map = copy.deepcopy(self.game)
             for move in move_set_list:
-                move_map.board[move[0]][move[1]] = '*'
+                if self.game.board[move[0]][move[1]] == ' ':
+                    move_map.board[move[0]][move[1]] = '*'
+                elif self.game.board[move[0]][move[1]][1] != self.player_color:
+                    move_map.board[move[0]][move[1]] = '@'
             return move_map.get_board()
     
 
@@ -515,7 +521,7 @@ class Player2():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
         if self.game.board[curr_index[0]][curr_index[1]] == ['N', self.player_color]:
-            move_set_list = Knight_possible_moves(self.game, curr_index)
+            move_set_list = Knight_possible_moves(self.game, curr_index, self.player_color)
         else:
             print(f"{self.player}:  Warning: Wrong Piece")
             return False
@@ -650,63 +656,63 @@ def Rook_possible_moves(game, index, color):
     return move_set_list
 
 
-def Knight_possible_moves(game, index):
+def Knight_possible_moves(game, index, color):
     move_set_list = []
 
     # one-up two-left
     ptr = index
-    if ptr[0] -1 >= 0 and ptr[1] - 2 > 0:
+    if ptr[0] -1 >= 0 and ptr[1] - 2 >= 0:
         ptr = [ptr[0] - 1, ptr[1] - 2]
-        if game.board[ptr[0]][ptr[1]] == ' ':
+        if game.board[ptr[0]][ptr[1]] == ' ' or game.board[ptr[0]][ptr[1]][1] != color:
             move_set_list.append(ptr)
     
     # two-up one-left
     ptr = index
     if ptr[0] - 2 >= 0 and ptr[1] - 1 >= 0:
         ptr = [ptr[0] - 2, ptr[1] - 1]
-        if game.board[ptr[0]][ptr[1]] == ' ':
+        if game.board[ptr[0]][ptr[1]] == ' ' or game.board[ptr[0]][ptr[1]][1] != color:
             move_set_list.append(ptr)
 
     # one-up two-right
     ptr = index
     if ptr[0] - 1 >= 0 and ptr[1] + 2 < len(file):
         ptr = [ptr[0] - 1, ptr[1] + 2]
-        if game.board[ptr[0]][ptr[1]] == ' ':
+        if game.board[ptr[0]][ptr[1]] == ' ' or game.board[ptr[0]][ptr[1]][1] != color:
             move_set_list.append(ptr)
 
     # two-up one-right
     ptr = index
     if ptr[0] - 2 >= 0 and ptr[1] + 1 < len(file):
         ptr = [ptr[0] - 2, ptr[1] + 1]
-        if game.board[ptr[0]][ptr[1]] == ' ':
+        if game.board[ptr[0]][ptr[1]] == ' ' or game.board[ptr[0]][ptr[1]][1] != color:
             move_set_list.append(ptr)
 
     # one-down two-left
     ptr = index
     if ptr[0] + 1 < len(rank) and ptr[1] - 2 >= 0:
         ptr = [ptr[0] + 1, ptr[1] -2]
-        if game.board[ptr[0]][ptr[1]] == ' ':
+        if game.board[ptr[0]][ptr[1]] == ' ' or game.board[ptr[0]][ptr[1]][1] != color:
             move_set_list.append(ptr)
 
     # two-down one-left
     ptr = index
     if ptr[0] + 2 < len(rank) and ptr[1] - 1 >= 0:
         ptr = [ptr[0] + 2, ptr[1] - 1]
-        if game.board[ptr[0]][ptr[1]] == ' ':
+        if game.board[ptr[0]][ptr[1]] == ' ' or game.board[ptr[0]][ptr[1]][1] != color:
             move_set_list.append(ptr)
 
     # one-down two-right
     ptr = index
     if ptr[0] + 1 < len(rank) and ptr[1] + 2 < len(file):
         ptr = [ptr[0] + 1, ptr[1] + 2]
-        if game.board[ptr[0]][ptr[1]] == ' ':
+        if game.board[ptr[0]][ptr[1]] == ' ' or game.board[ptr[0]][ptr[1]][1] != color:
             move_set_list.append(ptr)
 
     # two-down one-right
     ptr = index
     if ptr[0] + 2 < len(rank) and ptr[1] + 1 < len(file):
         ptr = [ptr[0] + 2, ptr[1] + 1]
-        if game.board[ptr[0]][ptr[1]] == ' ':
+        if game.board[ptr[0]][ptr[1]] == ' ' or game.board[ptr[0]][ptr[1]][1] != color:
             move_set_list.append(ptr)
 
     return move_set_list

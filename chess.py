@@ -227,8 +227,9 @@ class Player1():
             return False
 
         if next_index in move_set_list:
+            prev = self.game.board[next_index[0]][next_index[1]][0]
             move_piece(self.game, curr_index, next_index)
-            print(f'{self.player}: Rook at {position_from} has been moved to {position_to}')
+            print(point_system(self, prev))
             self.turn = False
             self.game.player2.turn = True
 
@@ -494,8 +495,10 @@ class Player2():
             return False
 
         if next_index in move_set_list:
+            prev = self.game.board[next_index[0]][next_index[1]][0]
             move_piece(self.game, curr_index, next_index)
             print(f'{self.player}:  Rook at {position_from} has been moved to {position_to}')
+            print(point_system(self, prev)) 
             self.turn = False
             self.game.player1.turn = True
 
@@ -801,3 +804,24 @@ def move_piece(game, index_from, index_to):
     temp = game.board[index_from[0]][index_from[1]]
     game.board[index_from[0]][index_from[1]] = ' '
     game.board[index_to[0]][index_to[1]] = temp
+
+
+def point_system(player, target):
+    if target == 'P':
+        player.point += 1
+        return(f'{player.player}:  You have captured the opponent\'s pawn, you earned 1 point')
+    elif target == 'N':
+        player.point += 3
+        return(f'{player.player}:  You have captured the opponent\'s knight, you earned 3 points')
+    elif target == 'B':
+        player.point += 3
+        return(f'{player.player}:  You have captured the opponent\'s bishiop, you earned 3 points')
+    elif target == 'R':
+        player.point += 5
+        return(f'{player.player}:  You have captured the opponent\'s rook, you earned 5 points')
+    elif target == 'Q':
+        player.point += 9
+        return(f'{player.player}:  You have captured the opponent\s queen, you earned 9 points')
+    elif target == 'K':
+        # Reset the game or update the game so that it cannot be played anymore 
+        return(f'{player.player}: You have captured the oppoent\'s king, you won the match')

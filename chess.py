@@ -136,7 +136,7 @@ class Player1():
         if self.game.board[curr_index[0]][curr_index[1]] == ['B', self.player_color]:
             print(f'{self.player}:  A map of your possible moves for bishop at position {position}:')
 
-            move_set_list = Bishop_possible_moves(self.game, curr_index)
+            move_set_list = Bishop_possible_moves(self.game, curr_index, self.player_color)
 
             # Visualize possible moves
             move_map = copy.deepcopy(self.game)
@@ -150,7 +150,7 @@ class Player1():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         if self.game.board[curr_index[0]][curr_index[1]] == ['Q', self.player_color]:
             print(f'{self.player}:  A map of your possible moves for queen at position {position}:')
-            move_set_list = Queen_possible_moves(self.game, curr_index)
+            move_set_list = Queen_possible_moves(self.game, curr_index, self.player_color)
 
             move_map = copy.deepcopy(self.game)
             for move in move_set_list:
@@ -163,7 +163,7 @@ class Player1():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         if self.game.board[curr_index[0]][curr_index[1]] == ['K', self.player_color]:
             print(f'{self.player}:  A map of your possible moves for king at position {position}:')
-            move_set_list =  King_possible_moves(self.game, curr_index)
+            move_set_list =  King_possible_moves(self.game, curr_index, self.plyaer_color)
 
             move_map = copy.deepcopy(self.game)
             for move in move_set_list:
@@ -276,14 +276,16 @@ class Player1():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
         if self.game.board[curr_index[0]][curr_index[1]] == ['B', self.player_color]:
-            move_set_list = Bishop_possible_moves(self.game, curr_index)
+            move_set_list = Bishop_possible_moves(self.game, curr_index, self.player_color)
         else:
             print(f"{self.player}:  Warning: Wrong Piece")
             return False
 
         if next_index in move_set_list:
+            prev = self.game.board[next_index[0]][next_index[1]][0]
             move_piece(self.game, curr_index, next_index)
             print(f'{self.player}:  Bishop at {position_from} has been moved to {position_to}')
+            print(point_system(self, prev))
             self.turn = False
             self.game.player2.turn = True
 
@@ -301,14 +303,16 @@ class Player1():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
         if self.game.board[curr_index[0]][curr_index[1]] == ['Q', self.player_color]:
-            move_set_list = Queen_possible_moves(self.game, curr_index)
+            move_set_list = Queen_possible_moves(self.game, curr_index, self.player_color)
         else:
             print(f"{self.player}:  Warning: Wrong Piece")
             return False
 
         if next_index in move_set_list:
+            prev = self.game.board[next_index[0]][next_index[1]][0]
             move_piece(self.game, curr_index, next_index)
             print(f'{self.player}:  Queen at {position_from} has been moved to {position_to}')
+            print(point_system(self, prev))
             self.turn = False
             self.game.player2.turn = True
 
@@ -326,12 +330,13 @@ class Player1():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
         if self.game.board[curr_index[0]][curr_index[1]] == ['K', self.player_color]:
-            move_set_list = King_possible_moves(self.game, curr_index)
+            move_set_list = King_possible_moves(self.game, curr_index, self.player_color)
         else:
             print(f"{self.player}:  Warning: Wrong Piece")
             return False
 
         if next_index in move_set_list:
+            prev = self.game.board[next_index[0]][next_index[1]][0]
             move_piece(self.game, curr_index, next_index)
             print(f'{self.player}:  King at {position_from} has been moved to {position_to}')
             self.turn = False
@@ -410,7 +415,7 @@ class Player2():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         if self.game.board[curr_index[0]][curr_index[1]] == ['B', self.player_color]:
             print(f'{self.player}:  A map of your possible moves for bishop at position {position}:')
-            move_set_list = Bishop_possible_moves(self.game, curr_index)
+            move_set_list = Bishop_possible_moves(self.game, curr_index, self.player_color)
 
             move_map = copy.deepcopy(self.game)
             for move in move_set_list:
@@ -423,7 +428,7 @@ class Player2():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         if self.game.board[curr_index[0]][curr_index[1]] == ['Q', self.player_color]:
             print(f'{self.player}:  A map of your possible moves for queen at position {position}:')
-            move_set_list = Queen_possible_moves(self.game, curr_index)
+            move_set_list = Queen_possible_moves(self.game, curr_index, self.player_color)
 
             move_map = copy.deepcopy(self.game)
             for move in move_set_list:
@@ -436,7 +441,7 @@ class Player2():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         if self.game.board[curr_index[0]][curr_index[1]] == ['K', self.player_color]:
             print(f'{self.player}:  A map of your possible moves for king at position {position}:')
-            move_set_list = King_possible_moves(self.game, curr_index)
+            move_set_list = King_possible_moves(self.game, curr_index, self.plyaer_color)
 
             move_map = copy.deepcopy(self.game)
             for move in move_set_list:
@@ -549,14 +554,16 @@ class Player2():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
         if self.game.board[curr_index[0]][curr_index[1]] == ['B', self.player_color]:
-            move_set_list = Bishop_possible_moves(self.game, curr_index)
+            move_set_list = Bishop_possible_moves(self.game, curr_index, self.player_color)
         else:
             print(f"{self.player}:  Warning: Wrong Piece")
             return False
 
         if next_index in move_set_list:
+            prev = self.game.board[next_index[0]][next_index[1]][0]
             move_piece(self.game, curr_index, next_index)
             print(f'{self.player}:  Bishop at {position_from} has been moved to {position_to}')
+            print(point_system(self, prev))
             self.turn = False
             self.game.player1.turn = True
 
@@ -574,14 +581,16 @@ class Player2():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
         if self.game.board[curr_index[0]][curr_index[1]] == ['Q', self.player_color]:
-            move_set_list = Queen_possible_moves(self.game, curr_index)
+            move_set_list = Queen_possible_moves(self.game, curr_index, self.player_color)
         else:
             print(f"{self.player}:  Warning: Wrong Piece")
             return False
 
         if next_index in move_set_list:
+            prev = self.game.board[next_index[0]][next_index[1]][0]
             move_piece(self.game, curr_index, next_index)
             print(f'{self.player}:  Queen at {position_from} has been moved to {position_to}')
+            print(point_system(self, prev))
             self.turn = False
             self.game.player2.turn = True
 
@@ -599,14 +608,16 @@ class Player2():
         curr_index = [rank.index(curr_let[1]), file.index(curr_let[0])]
         next_index = [rank.index(next_let[1]), file.index(next_let[0])]
         if self.game.board[curr_index[0]][curr_index[1]] == ['K', self.player_color]:
-            move_set_list = King_possible_moves(self.game, curr_index)
+            move_set_list = King_possible_moves(self.game, curr_index, self.player_color)
         else:
             print(f"{self.player}:  Warning: Wrong Piece")
             return False
 
         if next_index in move_set_list:
+            prev = self.game.board[next_index[0]][next_index[1]][0]
             move_piece(self.game, curr_index, next_index)
             print(f'{self.player}:  King at {position_from} has been moved to {position_to}')
+            print(point_system(self, prev))
             self.turn = False
             self.game.player2.turn = True
 
@@ -722,14 +733,14 @@ def Knight_possible_moves(game, index, color):
     return move_set_list
 
 
-def Bishop_possible_moves(game, index):
+def Bishop_possible_moves(game, index, color):
     move_set_list = []
 
     # Case 1: Up-left
     ptr = index
     while ptr[0] > 0 and ptr[1] > 0:
         ptr = [ptr[0] - 1, ptr[1] - 1]
-        if game.board[ptr[0]][ptr[1]] == ' ':
+        if game.board[ptr[0]][ptr[1]] == ' ' or game.board[ptr[0]][ptr[1]] != color:
             move_set_list.append(ptr)
         else:
             break
@@ -738,7 +749,7 @@ def Bishop_possible_moves(game, index):
     ptr = index
     while ptr[0] > 0 and ptr[1] < len(file) - 1:
         ptr = [ptr[0] - 1, ptr[1] + 1]
-        if game.board[ptr[0]][ptr[1]] == ' ':
+        if game.board[ptr[0]][ptr[1]] == ' ' or game.board[ptr[0]][ptr[1]] != color:
             move_set_list.append(ptr)
         else:
             break
@@ -747,7 +758,7 @@ def Bishop_possible_moves(game, index):
     ptr = index
     while ptr[0] < len(rank) - 1 and ptr[1] > 0:
         ptr = [ptr[0] + 1, ptr[1] - 1]
-        if game.board[ptr[0]][ptr[1]] == ' ':
+        if game.board[ptr[0]][ptr[1]] == ' ' or game.board[ptr[0]][ptr[1]] != color:
             move_set_list.append(ptr)
         else:
             break
@@ -756,7 +767,7 @@ def Bishop_possible_moves(game, index):
     ptr = index
     while ptr[0] < len(rank) - 1 and ptr[1] < len(file) - 1:
         ptr = [ptr[0] + 1, ptr[1] + 1]
-        if game.board[ptr[0]][ptr[1]] == ' ':
+        if game.board[ptr[0]][ptr[1]] == ' ' or game.board[ptr[0]][ptr[1]] != color:
             move_set_list.append(ptr)
         else:
             break
@@ -764,14 +775,14 @@ def Bishop_possible_moves(game, index):
     return move_set_list
 
 
-def Queen_possible_moves(game, index):
-    move_set_list_cross = Rook_possible_moves(game, index)
-    move_set_list_diagonal = Bishop_possible_moves(game, index)
+def Queen_possible_moves(game, index, color):
+    move_set_list_cross = Rook_possible_moves(game, index, color)
+    move_set_list_diagonal = Bishop_possible_moves(game, index, color)
     move_set_list = move_set_list_cross + move_set_list_diagonal
 
     return move_set_list
 
-def King_possible_moves(game, index):
+def King_possible_moves(game, index, color):
     move_set_list = []
 
     ptr = index

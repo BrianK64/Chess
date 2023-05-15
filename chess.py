@@ -800,24 +800,60 @@ def King_possible_moves(game, index, color):
 
 def Pawn_possible_moves(game, index, color):
     move_set_list = []
-    
-    ptr = index
+    [rank_i, file_i] = index
+
     # White pawn's moves
-    if color == "White" and ptr[0] > 0:
+    if color == "White" and rank_i > 0:
+
+        if rank_i == 6:
+            if game.board[rank_i-1][file_i] == ' ' and game.board[rank_i-2][file_i] == ' ':
+                move_set_list.append([rank_i-1, file_i])
+                move_set_list.append([rank_i-2, file_i])
+        else:
+            if game.board[rank_i-1][file_i] == ' ':
+                move_set_list.append([rank_i-1, file_i])
+        if file_i > 0:
+            if game.board[rank_i-1][file_i-1] != ' ' and game.board[rank_i-1][file_i-1][1] == 'Black':
+                move_set_list.append([rank_i-1, file_i-1])
+        if file_i < len(file) - 1:
+            if game.board[rank_i-1][file_i+1] != ' ' and game.board[rank_i-1][file_i+1][1] == 'Black':
+                move_set_list.append([rank_i-1, file_i+1])
+
+
+        '''
         # top two diagonal blocks of current index
         for file_i in range(ptr[1] - 1, ptr[1] + 2, 2):
             if file_i >= 0 and file_i < len(file):
                 if game.board[ptr[0] - 1][file_i] == ' ' or game.board[ptr[0] - 1][file_i][1] != color:
                     move_set_list.append([ptr[0] - 1, file_i])
+        '''
 
     # Black pawn's moves
+    if color == "Black" and rank_i < len(rank):
+
+        if rank_i == 1:
+            if game.board[rank_i+1][file_i] == ' ' and game.board[rank_i+2][file_i] == ' ':
+                move_set_list.append([rank_i+1, file_i])
+                move_set_list.append([rank_i+2, file_i])
+        else:
+            if game.board[rank_i+1][file_i] == ' ':
+                move_set_list.append([rank_i+1, file_i])
+        if file_i > 0:
+            if game.board[rank_i+1][file_i-1] != ' ' and game.board[rank_i+1][file_i-1][1] == 'White':
+                move_set_list.append([rank_i+1, file_i-1])
+        if file_i < len(file) - 1:
+            if game.board[rank_i+1][file_i+1] != ' ' and game.board[rank_i+1][file_i+1][1] == 'White':
+                move_set_list.append([rank_i+1, file_i+1])
+
+
+    """
     if color == "Black" and ptr[0] < len(rank):
         # bottom two diagonal blocks of current index
         for file_i in range(ptr[1] - 1, ptr[1] + 2, 2):
             if file_i >= 0 and file_i < len(file):
                 if game.board[ptr[0] + 1][file_i] == ' ' or game.board[ptr[0] + 1][file_i][1] != color:
                     move_set_list.append([ptr[0] + 1, file_i])
-
+    """
     return move_set_list
 
 
